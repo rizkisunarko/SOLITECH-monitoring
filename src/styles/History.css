@@ -1,0 +1,241 @@
+/* ========================================================== */
+/* HISTORY PAGE STYLES */
+/* ========================================================== */
+.history-container {
+  padding: 0 24px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.history-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 24px;
+}
+
+.history-header h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary-blue);
+}
+
+.history-header p {
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  gap: 12px;
+}
+
+.search-bar svg {
+  color: var(--text-light);
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dark);
+  outline: none;
+}
+
+.search-bar input::placeholder {
+  color: var(--text-light);
+}
+
+/* Filter Scroller */
+.filter-scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.filter-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.filter-pill.active {
+  background-color: var(--primary-blue);
+  color: var(--white);
+}
+
+.filter-pill.inactive {
+  background-color: #f1f5f9;
+  color: var(--text-light);
+}
+
+/* Timeline */
+.timeline-container {
+  position: relative;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* The vertical connecting line */
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  width: 2px;
+  background-color: #dbeafe;
+  z-index: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--white);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--primary-blue);
+}
+
+.timeline-card {
+  flex: 1;
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Status borders */
+.timeline-card.status-selesai {
+  border-left: 3px solid #22c55e;
+}
+
+.timeline-card.status-arsip {
+  border-left: 3px solid #f59e0b;
+}
+
+.timeline-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeline-date {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--text-lighter);
+  letter-spacing: 1px;
+}
+
+.timeline-badge {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.timeline-badge.badge-selesai {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.timeline-badge.badge-arsip {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.timeline-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.timeline-desc {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-light);
+}
+
+/* Desktop Styles for History */
+@media (min-width: 768px) {
+  .history-container {
+    padding: 0 40px 40px;
+  }
+  .history-header {
+    padding-top: 32px;
+  }
+}
+
+/* Export Button */
+.export-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.btn-export-pdf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: #bfdbfe; /* Light blue background */
+  color: #1e3a8a; /* Dark blue text */
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  width: 100%;
+  max-width: 320px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-export-pdf:hover {
+  background-color: #93c5fd;
+  transform: translateY(-2px);
+}
+
+.btn-export-pdf:active {
+  transform: translateY(0);
+}

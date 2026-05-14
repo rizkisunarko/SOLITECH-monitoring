@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Schedule from './Schedule';
+import History from './History';
+import HardwareStatistik from './HardwareStatistik';
 import '../styles/Dashboard.css';
 
 const Dashboard = ({ user }) => {
   const [activeNav, setActiveNav] = useState('beranda');
+  const [showStats, setShowStats] = useState(false);
 
   return (
     <div className="dashboard-layout has-sidebar">
@@ -81,6 +84,9 @@ const Dashboard = ({ user }) => {
       {/* Main Content Area */}
       <main className="dashboard-main">
         {activeNav === 'beranda' && (
+          showStats ? (
+            <HardwareStatistik onBack={() => setShowStats(false)} />
+          ) : (
           <div className="fade-in">
             {/* Header Top */}
             <div className="dash-header-top">
@@ -111,6 +117,21 @@ const Dashboard = ({ user }) => {
             {/* Content Grid */}
             <div className="dash-content">
               
+              {/* Statistik Hardware Button */}
+              <button className="btn-statistik-hardware" onClick={() => setShowStats(true)}>
+                <div className="statistik-icon-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                </div>
+                <span className="statistik-text">Statistik Hardware</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="statistik-chevron">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+
               {/* Status Card */}
               <div className="card status-card">
                 <div className="status-info">
@@ -208,17 +229,21 @@ const Dashboard = ({ user }) => {
                   <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Motherboard Architecture" />
                 </div>
               </div>
-
             </div>
           </div>
+          )
         )}
 
         {activeNav === 'jadwal' && (
           <Schedule />
         )}
 
+        {activeNav === 'riwayat' && (
+          <History />
+        )}
+
         {/* Temporary placeholder for other pages */}
-        {['riwayat', 'panduan', 'profil'].includes(activeNav) && (
+        {['panduan', 'profil'].includes(activeNav) && (
           <div className="fade-in" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-light)' }}>
             <h2>Halaman {activeNav.charAt(0).toUpperCase() + activeNav.slice(1)}</h2>
             <p>Fitur sedang dalam pengembangan.</p>

@@ -179,6 +179,50 @@
   gap: 16px;
 }
 
+/* Statistik Hardware Button */
+.btn-statistik-hardware {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: #f0f5ff; /* Light blue */
+  border: none;
+  border-radius: 16px;
+  padding: 12px 20px 12px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-statistik-hardware:hover {
+  background-color: #e5edff;
+  transform: translateY(-1px);
+}
+
+.btn-statistik-hardware:active {
+  transform: translateY(0);
+}
+
+.statistik-icon-wrapper {
+  background-color: var(--white);
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.statistik-text {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  flex: 1;
+  text-align: left;
+}
+
 /* Cards */
 .card {
   background-color: var(--white);
@@ -538,6 +582,10 @@
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: min-content;
     gap: 24px;
+  }
+
+  .btn-statistik-hardware {
+    grid-column: 1 / -1;
   }
 
   .status-card {

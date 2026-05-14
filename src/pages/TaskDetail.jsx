@@ -116,29 +116,31 @@ const TaskDetail = ({ task, onBack }) => {
     <div className="task-detail-container slide-in-right">
       {/* App Bar */}
       <div className="task-detail-header">
-        <button className="btn-icon-transparent" onClick={onBack}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-        </button>
-        <h2>Detail Tugas</h2>
+        <div className="header-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button className="btn-icon-transparent" onClick={onBack}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#041031" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <h2 style={{ color: '#041031', fontSize: '22px', fontWeight: '800' }}>Detail Tugas</h2>
+        </div>
         <button className="btn-icon-transparent">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="1"></circle>
-            <circle cx="12" cy="5" r="1"></circle>
-            <circle cx="12" cy="19" r="1"></circle>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#041031" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
           </svg>
         </button>
       </div>
 
       <div className="task-detail-content">
         {/* Main Info Card */}
-        <div className="detail-main-card">
+        <div className="detail-main-card" style={{ display: 'block', minHeight: '120px', border: '1px solid #e2e8f0' }}>
           <div className="detail-card-top">
             <div className="detail-title-area">
               <span className="badge-priority">{data.priorityBadge}</span>
-              <h1 className="detail-title">{task.title}</h1>
+              <h1 className="detail-title" style={{ color: '#0f172a' }}>{task.title}</h1>
               <p className="detail-subtitle">{data.subtitle}</p>
             </div>
             <div className="detail-icon-bg">

@@ -114,24 +114,25 @@
   top: 0;
   right: 0;
   height: 100%;
-  width: 120px;
-  background-color: #fef8f3;
-  border-radius: 16px 0 0 16px;
+  width: 100px;
+  background-color: #fef8eb;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
+  border-bottom-left-radius: 16px;
 }
 
 .detail-icon-box {
-  width: 54px;
-  height: 54px;
-  background-color: #f5f8fc;
+  width: 48px;
+  height: 48px;
+  background-color: #ffffff;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .text-warning {
