@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import usersData from '../data/users.json';
 
 const Login = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,8 +18,8 @@ const Login = ({ onLogin }) => {
     const user = usersData.find(u => u.email === email && u.password === password);
     
     if (user) {
-      // Pass the user data up if needed, or just boolean
-      onLogin(user);
+      if (onLogin) onLogin(user);
+      navigate('/dashboard');
     } else {
       setError('Email atau password salah!');
     }
