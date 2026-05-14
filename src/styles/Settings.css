@@ -1,0 +1,254 @@
+/* Settings Page Styles */
+
+.settings-container {
+  padding: 0 24px 100px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafbfc;
+  min-height: 100vh;
+}
+
+/* Header */
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fafbfc;
+}
+
+.settings-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-back-settings {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: -4px;
+}
+
+.settings-header-left h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary-blue);
+}
+
+.settings-version {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-lighter);
+  letter-spacing: 1px;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Admin Card */
+.settings-profile-card {
+  background-color: #f4f7fb;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.settings-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.settings-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-profile-info h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.settings-profile-info p {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+/* Sections */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-section-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-lighter);
+  letter-spacing: 1px;
+}
+
+.settings-list-card {
+  background-color: var(--white);
+  border-radius: 16px;
+  padding: 8px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.settings-icon-box {
+  width: 40px;
+  height: 40px;
+  background-color: #f4f7fb;
+  color: var(--primary-blue);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-item-text h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.settings-item-text p {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.settings-item-right-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--primary-blue);
+}
+
+/* Toggles */
+.toggle-switch {
+  width: 44px;
+  height: 24px;
+  background-color: #cbd5e1;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.toggle-switch.active {
+  background-color: var(--primary-blue);
+}
+
+.toggle-knob {
+  width: 20px;
+  height: 20px;
+  background-color: var(--white);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.toggle-switch.active .toggle-knob {
+  transform: translateX(20px);
+}
+
+/* Logout Button */
+.btn-settings-logout {
+  background-color: var(--white);
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+
+.btn-settings-logout:hover {
+  background-color: #fef2f2;
+}
+
+/* Footer */
+.settings-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.settings-footer p {
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.settings-footer p:first-child {
+  letter-spacing: 1px;
+}
+
+/* Desktop overrides */
+@media (min-width: 1024px) {
+  .settings-container {
+    padding: 32px 48px;
+    max-width: none;
+    margin: 0;
+  }
+  .settings-header {
+    padding: 0 0 32px 0;
+  }
+}

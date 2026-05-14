@@ -1,0 +1,865 @@
+/* ========================================================== */
+/* PROFILE PAGE STYLES */
+/* ========================================================== */
+
+.profile-container {
+  min-height: 100vh;
+}
+
+/* ========================================================== */
+/* MOBILE VIEW STYLES */
+/* ========================================================== */
+
+.profile-mobile-view {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 100px;
+  background-color: #fafbfc;
+}
+
+.profile-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fafbfc;
+}
+
+.profile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-main-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary-blue);
+  line-height: 1.2;
+}
+
+.profile-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-icon-profile {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-main-area-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.profile-info-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background-color: #1a2a3a;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-edit-avatar {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: 2px solid var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.btn-edit-profile {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 800;
+  width: 100%;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-lighter);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.section-link {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+.health-cards-row {
+  display: flex;
+  gap: 16px;
+}
+
+.health-card {
+  flex: 1;
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.health-card::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 0;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+}
+
+.green-border::before { background-color: var(--green-success); }
+.orange-border::before { background-color: #f59e0b; }
+
+.health-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-light);
+  line-height: 1.4;
+  text-transform: uppercase;
+  padding-left: 8px;
+}
+
+.health-value {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding-left: 8px;
+}
+
+.health-value strong {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.health-badge {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 3px 0;
+}
+.health-badge.optimal { color: var(--green-success); }
+.health-badge.tinggi { color: #f59e0b; }
+
+.uptime-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.uptime-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.uptime-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #f0f5ff;
+  color: var(--primary-blue);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uptime-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.uptime-text .health-label { padding-left: 0; }
+.uptime-text strong {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.device-card {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.device-icon { color: var(--primary-blue); }
+
+.device-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.device-info h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.device-info p {
+  font-size: 10px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-green { background-color: var(--green-success); }
+.dot-gray { background-color: #94a3b8; }
+
+.btn-device-settings {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.btn-add-device {
+  background-color: transparent;
+  color: var(--text-dark);
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.profile-bottom-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.action-row {
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 8px 0;
+  cursor: pointer;
+  color: var(--text-dark);
+}
+
+.action-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.action-logout {
+  color: #ef4444; 
+  margin-top: 8px;
+}
+.action-logout .action-left { color: #ef4444; }
+
+/* Hide Desktop View by Default */
+.profile-desktop-view {
+  display: none;
+}
+
+
+/* ========================================================== */
+/* DESKTOP VIEW STYLES (min-width: 1024px) */
+/* ========================================================== */
+
+@media (min-width: 1024px) {
+  .profile-mobile-view {
+    display: none;
+  }
+  
+  .profile-desktop-view {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 48px;
+    background-color: #fafbfc;
+    min-height: 100vh;
+  }
+
+  /* Desktop Header */
+  .d-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .d-profile-header h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary-blue);
+  }
+
+  .d-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .d-btn-icon {
+    background-color: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .d-mini-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  /* Grid Layout */
+  .d-profile-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+  }
+
+  .d-grid-left {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .d-grid-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Info Card */
+  .d-info-card {
+    background-color: var(--white);
+    border-radius: 20px;
+    padding: 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  }
+
+  .d-info-avatar-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .d-avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    object-fit: cover;
+  }
+
+  .d-btn-edit-profile {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .d-info-details-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .d-info-details-col h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .d-email {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .d-badges-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .d-badge-platinum {
+    background-color: #eaf1fb;
+    color: var(--primary-blue);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  .d-badge-verified {
+    background-color: #f0fdf4;
+    color: var(--green-success);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  /* Devices */
+  .d-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .d-section-header h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .d-section-header a {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--primary-blue);
+    text-decoration: none;
+  }
+
+  .d-devices-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .d-device-card {
+    background-color: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    position: relative;
+  }
+
+  .d-device-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 24px;
+    bottom: 24px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .d-device-card.border-green::before { background-color: var(--green-success); }
+  .d-device-card.border-gray::before { background-color: #cbd5e1; }
+
+  .d-device-card-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-left: 12px;
+  }
+
+  .d-device-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-blue);
+  }
+
+  .d-device-settings {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+  }
+
+  .d-device-info {
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .d-device-info h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .d-device-info p {
+    font-size: 12px;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Activity Card */
+  .d-activity-card {
+    background-color: #f4f7fb;
+    border-radius: 20px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .d-activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .d-activity-title h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+
+  .d-activity-title p {
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  .d-btn-download {
+    background-color: var(--white);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .d-activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .d-activity-item {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .d-activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .d-activity-icon.green-bg {
+    background-color: #f0fdf4;
+    color: var(--green-success);
+  }
+
+  .d-activity-icon.orange-bg {
+    background-color: #fffbeb;
+    color: #f59e0b;
+  }
+
+  .d-activity-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .d-activity-text h4 {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .d-activity-text p {
+    font-size: 11px;
+    color: var(--text-light);
+  }
+
+  .d-activity-time {
+    font-size: 11px;
+    color: var(--text-lighter);
+    font-weight: 600;
+  }
+
+  /* Right Column Health Cards */
+  .d-health-card {
+    background-color: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  }
+
+  .d-health-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8fafc;
+  }
+
+  .d-health-icon.green-text { color: var(--green-success); }
+  .d-health-icon.orange-text { color: #f59e0b; }
+  .d-health-icon.blue-text { color: var(--primary-blue); }
+
+  .d-health-data {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .d-health-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-lighter);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .d-health-val {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .d-health-val strong {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  .d-health-badge {
+    font-size: 9px;
+    font-weight: 800;
+  }
+  .d-health-badge.optimal { color: var(--green-success); }
+  .d-health-badge.tinggi { color: #f59e0b; }
+
+  /* Add Device */
+  .d-add-device-card {
+    background-color: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .d-add-device-card:hover {
+    border-color: var(--primary-blue);
+    background-color: #f0f5ff;
+  }
+
+  .d-add-icon {
+    width: 48px;
+    height: 48px;
+    background-color: var(--white);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+
+  .d-add-device-card p {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-dark);
+  }
+
+  /* Settings */
+  .d-quick-settings {
+    background-color: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  }
+
+  .d-settings-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-lighter);
+    letter-spacing: 1px;
+  }
+
+  .d-settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .d-setting-item {
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .d-setting-item:last-child {
+    border-bottom: none;
+  }
+
+  .d-setting-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+}

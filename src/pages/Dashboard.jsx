@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import Schedule from './Schedule';
 import History from './History';
 import HardwareStatistik from './HardwareStatistik';
+import Guide from './Guide';
+import Profile from './Profile';
+import Settings from './Settings';
 import '../styles/Dashboard.css';
 
 const Dashboard = ({ user }) => {
   const [activeNav, setActiveNav] = useState('beranda');
   const [showStats, setShowStats] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   return (
     <div className="dashboard-layout has-sidebar">
@@ -242,12 +246,16 @@ const Dashboard = ({ user }) => {
           <History />
         )}
 
-        {/* Temporary placeholder for other pages */}
-        {['panduan', 'profil'].includes(activeNav) && (
-          <div className="fade-in" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-light)' }}>
-            <h2>Halaman {activeNav.charAt(0).toUpperCase() + activeNav.slice(1)}</h2>
-            <p>Fitur sedang dalam pengembangan.</p>
-          </div>
+        {activeNav === 'panduan' && (
+          <Guide />
+        )}
+
+        {activeNav === 'profil' && (
+          showSettings ? (
+            <Settings onBack={() => setShowSettings(false)} />
+          ) : (
+            <Profile user={user} onSettingsClick={() => setShowSettings(true)} />
+          )
         )}
       </main>
     </div>
