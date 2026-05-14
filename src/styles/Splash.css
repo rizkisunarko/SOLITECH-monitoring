@@ -1,0 +1,116 @@
+/* Splash Screen Styles */
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #031438; /* Deep dark blue from the screenshot */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: white;
+  animation: fadeOut 0.5s ease-in-out 1.5s forwards; 
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.splash-logo-box {
+  width: 96px;
+  height: 96px;
+  background-color: #ffffff;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #031438;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: float 2s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+.splash-title {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.splash-subtitle {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #8fa1c9; /* Light blue/grey */
+  margin-bottom: 0;
+}
+
+.splash-footer {
+  position: absolute;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.splash-loader {
+  width: 220px;
+  height: 3px;
+  background-color: #102a63; /* Track dark blue */
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.splash-loader::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  background-color: #7b9cf0; /* Progress bar light blue */
+  border-radius: 4px;
+  animation: loadProgress 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes loadProgress {
+  0% { left: 0%; width: 20%; }
+  50% { width: 50%; }
+  100% { left: 100%; transform: translateX(-100%); width: 20%; }
+}
+
+.splash-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #8fa1c9;
+}
+
+.splash-status span {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.splash-version {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #4b6499;
+}
