@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "email": "user@solitech.com",
+    "password": "password123",
+    "name": "User",
+    "device": "PC-GAMER-01"
+  }
+]

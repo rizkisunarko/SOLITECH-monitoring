@@ -1,0 +1,583 @@
+/* Dashboard Layout (New Sidebar Approach) */
+.dashboard-layout.has-sidebar {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+}
+
+/* Sidebar / Bottom Nav Styling */
+.sidebar {
+  width: 100%;
+  background-color: var(--white);
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid var(--border-light);
+  border-right: none;
+  padding: 12px 0 24px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  top: auto;
+  height: auto;
+  z-index: 100;
+  box-shadow: 0 -10px 20px rgba(0,0,0,0.03);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  justify-content: space-around;
+}
+
+.sidebar-brand {
+  display: none; /* Hide brand on mobile */
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-text {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 0;
+  width: 100%;
+  justify-content: space-around;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-lighter);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.nav-item.active {
+  background-color: var(--input-bg);
+  color: var(--accent-blue);
+}
+
+.nav-text {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Dashboard Main Content */
+.dashboard-main {
+  flex: 1;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-bottom: 90px; /* Space for mobile bottom nav */
+  animation: fadeIn 0.4s ease-out;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-main {
+    max-width: 1200px; /* Restrict width on very large screens */
+  }
+}
+
+/* Dashboard Header Area */
+.dash-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 16px;
+}
+
+.dash-logo-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-logo {
+  color: var(--primary-blue);
+}
+
+.dash-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: #e8f0fe;
+  color: var(--primary-blue);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #dbeafe;
+}
+
+/* Welcome Section */
+.welcome-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 24px 24px;
+}
+
+.welcome-text p {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.welcome-text h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary-blue);
+}
+
+.active-device {
+  text-align: right;
+}
+
+.active-device-label {
+  font-size: 10px;
+  color: var(--text-lighter);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.active-device-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+/* Dashboard Content */
+.dash-content {
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cards */
+.card {
+  background-color: var(--white);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.05);
+}
+
+.status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--green-success);
+  box-shadow: 0 0 0 4px var(--green-bg);
+}
+
+.status-text h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.status-text p {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.badge-active {
+  background-color: var(--green-bg);
+  color: var(--green-success);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stat-card {
+  background-color: var(--input-bg);
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card.dashed-border {
+  background-color: var(--white);
+  border: 1px dashed rgba(37, 99, 235, 0.4);
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  background-color: var(--white);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-blue);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary-blue);
+  display: flex;
+  align-items:baseline;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.stat-unit {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.stat-bar-bg {
+  height: 4px;
+  background-color: rgba(0,0,0,0.05);
+  border-radius: 2px;
+  width: 100%;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background-color: var(--primary-blue);
+  border-radius: 2px;
+}
+
+/* Battery Card */
+.battery-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.battery-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 4px solid var(--green-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.battery-info {
+  flex: 1;
+}
+
+.battery-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.battery-info p {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.battery-icon {
+  color: var(--green-success);
+}
+
+/* Maintenance Card (New Vivid Style) */
+.maintenance-card.style-new {
+  background-color: #0b3c8c; /* Vivid Royal Blue */
+  color: var(--white);
+  border-radius: 20px;
+  padding: 32px 24px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 10px 20px rgba(11, 60, 140, 0.15);
+}
+
+/* Background squares */
+.maintenance-card.style-new::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 160px;
+  height: 160px;
+  background-color: rgba(255, 255, 255, 0.08); /* Light transparent square */
+  border-radius: 24px;
+  z-index: -1;
+}
+
+.maintenance-card.style-new::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: -20px;
+  width: 140px;
+  height: 140px;
+  background-color: rgba(255, 255, 255, 0.04); /* Lighter transparent square */
+  border-radius: 24px;
+  z-index: -1;
+}
+
+.maintenance-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #a4c2f4; /* Light blue text for header */
+}
+
+.maintenance-card h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.maintenance-card p {
+  font-size: 13px;
+  color: #a4c2f4; /* Lighter description text */
+  margin-bottom: 24px;
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+.btn-maintenance {
+  background-color: var(--white);
+  color: #0b3c8c;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn-maintenance:hover {
+  opacity: 0.9;
+}
+
+.btn-maintenance:active {
+  transform: translateY(1px);
+}
+
+/* Architecture Card */
+.architecture-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.architecture-header {
+  padding: 20px 20px 0;
+}
+
+.architecture-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.architecture-header p {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.architecture-image {
+  width: 100%;
+  height: 180px;
+}
+
+.architecture-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================================================== */
+/* RESPONSIVE DESKTOP LAYOUT (Sidebar expands) */
+/* ========================================================== */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    padding: 32px 20px;
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-right: 1px solid var(--border-light);
+    border-top: none;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 100;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 16px;
+    margin-bottom: 40px;
+    gap: 12px;
+  }
+
+  .brand-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .brand-text {
+    display: block;
+    font-size: 16px;
+  }
+
+  .sidebar-nav {
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+    justify-content: flex-start;
+  }
+
+  .nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 14px 16px;
+    border-radius: 10px;
+    gap: 16px;
+  }
+
+  .nav-text {
+    font-size: 14px;
+  }
+
+  .dash-header-top {
+    padding: 32px 40px 16px;
+  }
+
+  .welcome-section {
+    padding: 0 40px 24px;
+  }
+
+  .dash-content {
+    padding: 0 40px 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: min-content;
+    gap: 24px;
+  }
+
+  .status-card {
+    grid-column: 1 / -1;
+  }
+
+  .stats-grid {
+    grid-column: 1 / 3;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .battery-card {
+    grid-column: 3 / 4;
+    height: 100%;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px 20px;
+  }
+
+  .battery-info {
+    text-align: center;
+  }
+
+  .battery-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .maintenance-card {
+    grid-column: 1 / 2;
+  }
+
+  .architecture-card {
+    grid-column: 2 / -1;
+  }
+  
+  .architecture-image {
+    height: 220px;
+  }
+}
