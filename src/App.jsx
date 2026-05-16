@@ -6,6 +6,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Inisialisasi tema dari localStorage
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+
     // Simulasi loading selama 2 detik
     const timer = setTimeout(() => {
       setIsLoading(false);

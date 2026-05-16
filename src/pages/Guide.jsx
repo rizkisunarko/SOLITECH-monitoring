@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Guide.css';
 
 const Guide = () => {
   const filters = ['Semua', 'Prosesor', 'Baterai', 'Kebersihan', 'Layar'];
+  const [selectedGuide, setSelectedGuide] = useState(null);
+
+  const thermalPasteGuideDetail = {
+    title: 'Cara Ganti Thermal Paste',
+    desc: 'Langkah demi langkah mengganti pasta termal untuk menjaga suhu CPU tetap stabil.'
+  };
 
   return (
     <div className="guide-container fade-in">
@@ -68,7 +74,7 @@ const Guide = () => {
             <p>Langkah demi langkah mengganti pasta termal untuk menjaga suhu CPU tetap stabil...</p>
             <div className="featured-footer">
               <span className="read-time">12 Menit Membaca</span>
-              <button className="btn-read-more">
+              <button className="btn-read-more" onClick={() => setSelectedGuide('thermal')}>
                 Baca Selengkapnya 
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -113,6 +119,45 @@ const Guide = () => {
         </div>
 
       </div>
+
+      {/* Modal Detail Guide (Cara Ganti Thermal Paste) */}
+      {selectedGuide === 'thermal' && (
+        <div className="modal-overlay fade-in" onClick={() => setSelectedGuide(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+            <div className="modal-header">
+              <h3>{thermalPasteGuideDetail.title}</h3>
+              <button className="btn-close" onClick={() => setSelectedGuide(null)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className="modal-body" style={{ padding: '0 20px 20px', lineHeight: '1.6' }}>
+              <img 
+                src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="PC Maintenance" 
+                style={{ width: '100%', borderRadius: '8px', marginBottom: '15px', maxHeight: '250px', objectFit: 'cover' }} 
+              />
+              <p style={{ marginBottom: '15px' }}>{thermalPasteGuideDetail.desc}</p>
+              <h4>Alat yang dibutuhkan:</h4>
+              <ul style={{ paddingLeft: '20px', marginBottom: '15px' }}>
+                <li>Thermal Paste baru (seperti MX-4 atau Thermal Grizzly)</li>
+                <li>Obeng plus (Philips)</li>
+                <li>Tisu / kain microfiber dan alkohol (isopropyl)</li>
+              </ul>
+              <h4>Langkah-langkah:</h4>
+              <ol style={{ paddingLeft: '20px', marginBottom: '10px' }}>
+                <li style={{ marginBottom: '8px' }}>Matikan PC dan cabut semua kabel yang terhubung.</li>
+                <li style={{ marginBottom: '8px' }}>Buka casing PC dan lepas pendingin CPU secara perlahan.</li>
+                <li style={{ marginBottom: '8px' }}>Bersihkan sisa thermal paste lama di permukaan CPU dan pendingin menggunakan alkohol dan tisu.</li>
+                <li style={{ marginBottom: '8px' }}>Teteskan thermal paste baru seukuran biji kacang di tengah CPU.</li>
+                <li style={{ marginBottom: '8px' }}>Pasang kembali pendingin. Jangan menekan terlalu keras tapi pastikan terpasang rata.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TaskDetail from './TaskDetail';
 import '../styles/Schedule.css';
 
 const Schedule = () => {
+  const navigate = useNavigate();
+  const [selectedFullDate, setSelectedFullDate] = useState(new Date(2024, 2, 13)); // Maret = Bulan ke-2 di JS (0-indexed)
   const [activeDate, setActiveDate] = useState(13);
+  
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -11,6 +15,7 @@ const Schedule = () => {
       badgeText: 'DEADLINE: 15 MAR',
       type: 'warning',
       desc: 'Performa CPU mulai menurun pada suhu tinggi.',
+      date: 15,
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="m18 2 4 4"/>
@@ -28,6 +33,7 @@ const Schedule = () => {
       badgeText: 'SELESAI',
       type: 'success',
       desc: 'Sirkulasi udara optimal kembali.',
+      date: 13,
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -41,6 +47,7 @@ const Schedule = () => {
       badgeText: 'TERJADWAL: 20 APR',
       type: 'primary',
       desc: 'Kalibrasi rutin siklus pengisian daya.',
+      date: 13,
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="7" y="4" width="10" height="16" rx="2" ry="2"></rect>
@@ -52,15 +59,41 @@ const Schedule = () => {
     }
   ]);
 
-  const dates = [
-    { day: 'SEN', date: 11 },
-    { day: 'SEL', date: 12 },
-    { day: 'RAB', date: 13 },
-    { day: 'KAM', date: 14 },
-    { day: 'JUM', date: 15, hasEvent: true },
-    { day: 'SAB', date: 16 },
-    { day: 'MIN', date: 17 }
-  ];
+  // Format bulan untuk header (contoh: "Maret 2024")
+  const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const displayMonth = `${monthNames[selectedFullDate.getMonth()]} ${selectedFullDate.getFullYear()}`;
+
+  // Generate 7 days centered around selectedFullDate
+  const generateDates = () => {
+    const days = ['MIN', 'SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'];
+    let result = [];
+    for (let i = -3; i <= 3; i++) {
+      let d = new Date(selectedFullDate);
+      d.setDate(d.getDate() + i);
+      
+      // Deteksi hari yang punya event dari task
+      // Simplified: event true if any task date matching d.getDate() and we're in the same general month
+      const hasEvent = tasks.some(t => t.date === d.getDate() && selectedFullDate.getMonth() === 2); // 2 is March
+      
+      result.push({
+        day: days[d.getDay()],
+        date: d.getDate(),
+        fullDateObj: d,
+        hasEvent: hasEvent
+      });
+    }
+    return result;
+  };
+  
+  const dates = generateDates();
+
+  const handleDateChange = (e) => {
+    const d = new Date(e.target.value);
+    if (!isNaN(d.getTime())) {
+      setSelectedFullDate(d);
+      setActiveDate(d.getDate());
+    }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTaskInput, setNewTaskInput] = useState({ title: '', desc: '' });
@@ -93,9 +126,12 @@ const Schedule = () => {
     };
     
     // Add to the beginning of the list
-    setTasks([newTask, ...tasks]);
+    setTasks([{...newTask, date: activeDate}, ...tasks]);
     handleCloseModal();
   };
+
+  // Filter tasks based on selected date
+  const filteredTasks = tasks.filter(task => task.date === activeDate);
 
   return (
     <div className="schedule-container fade-in">
@@ -127,21 +163,41 @@ const Schedule = () => {
       {/* Calendar Section */}
       <div className="calendar-section">
         <div className="calendar-header">
-          <h3>Maret 2024</h3>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
+          <h3>{displayMonth}</h3>
+          
+          {/* Calendar Picker Native Input */}
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary" style={{ pointerEvents: 'none' }}>
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <input 
+              type="date" 
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                opacity: 0,
+                cursor: 'pointer'
+              }}
+              onChange={handleDateChange}
+            />
+          </div>
         </div>
         
         <div className="date-scroller">
-          {dates.map((item) => (
+          {dates.map((item, idx) => (
             <div 
-              key={item.date} 
+              key={idx} 
               className={`date-item ${activeDate === item.date ? 'active' : ''} ${item.hasEvent ? 'has-event' : ''}`}
-              onClick={() => setActiveDate(item.date)}
+              onClick={() => {
+                setActiveDate(item.date);
+                setSelectedFullDate(item.fullDateObj);
+              }}
             >
               <span className="day">{item.day}</span>
               <span className="date">{item.date}</span>
@@ -168,30 +224,36 @@ const Schedule = () => {
         </div>
 
         <div className="task-list">
-          {tasks.map((task) => (
-            <div 
-              key={task.id} 
-              className={`task-card task-${task.type} fade-in`}
-              onClick={() => setSelectedTask(task)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className={`task-icon-box box-${task.type}`}>
-                {task.icon}
-              </div>
-              <div className="task-content">
-                <div className="task-title-row">
-                  <h4>{task.title}</h4>
-                  <span className={`task-badge badge-${task.type}`}>{task.badgeText}</span>
-                </div>
-                <p>{task.desc}</p>
-              </div>
-              <div className="task-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </div>
+          {filteredTasks.length === 0 ? (
+            <div style={{textAlign: 'center', padding: '20px', color: '#6c757d', fontSize: '14px'}}>
+              Tidak ada agenda di tanggal ini.
             </div>
-          ))}
+          ) : (
+            filteredTasks.map((task) => (
+              <div 
+                key={task.id} 
+                className={`task-card task-${task.type} fade-in`}
+                onClick={() => setSelectedTask(task)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className={`task-icon-box box-${task.type}`}>
+                  {task.icon}
+                </div>
+                <div className="task-content">
+                  <div className="task-title-row">
+                    <h4>{task.title}</h4>
+                    <span className={`task-badge badge-${task.type}`}>{task.badgeText}</span>
+                  </div>
+                  <p>{task.desc}</p>
+                </div>
+                <div className="task-arrow">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Tips Card */}
@@ -205,7 +267,7 @@ const Schedule = () => {
             TIPS PERAWATAN
           </div>
           <h3>Bersihkan kipas minimal setiap 6 bulan untuk mencegah overheating.</h3>
-          <button className="btn-tips">Pelajari Selengkapnya</button>
+          <button className="btn-tips" onClick={() => navigate('/guide')}>Pelajari Selengkapnya</button>
           
           <svg className="tips-bg-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="currentColor" stroke="none">
             <path d="M12 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0 2c-4.42 0-8 3.58-8 8h16c0-4.42-3.58-8-8-8z" opacity="0.1"/>

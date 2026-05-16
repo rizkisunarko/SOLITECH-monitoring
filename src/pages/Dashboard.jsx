@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import Schedule from './Schedule';
 import History from './History';
 import HardwareStatistik from './HardwareStatistik';
@@ -7,10 +8,35 @@ import Profile from './Profile';
 import Settings from './Settings';
 import '../styles/Dashboard.css';
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user: propUser }) => {
+  const { t } = useLanguage();
   const [activeNav, setActiveNav] = useState('beranda');
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [tempUnit, setTempUnit] = useState(localStorage.getItem('tempUnit') || 'C');
+
+  useEffect(() => {
+    const handleTempChange = () => {
+      setTempUnit(localStorage.getItem('tempUnit') || 'C');
+    };
+    window.addEventListener('tempUnitChanged', handleTempChange);
+    return () => window.removeEventListener('tempUnitChanged', handleTempChange);
+  }, []);
+
+  const baseCpuTemp = 45;
+  const displayCpuTemp = tempUnit === 'F' ? Math.round(baseCpuTemp * 9/5 + 32) : baseCpuTemp;
+
+  // Get user from props or localStorage
+  const [user, setUser] = useState(() => {
+    if (propUser) return propUser;
+    const savedUser = localStorage.getItem('currentUser');
+    return savedUser ? JSON.parse(savedUser) : { name: 'User', email: 'user@solitech.com' };
+  });
+
+  const updateUser = (newUser) => {
+    setUser(newUser);
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+  };
 
   return (
     <div className="dashboard-layout has-sidebar">
@@ -43,7 +69,7 @@ const Dashboard = ({ user }) => {
                 <rect x="3" y="14" width="7" height="7"></rect>
               </svg>
             </div>
-            <span className="nav-text">Beranda</span>
+            <span className="nav-text">{t('nav.home')}</span>
           </button>
           <button className={`nav-item ${activeNav === 'jadwal' ? 'active' : ''}`} onClick={() => setActiveNav('jadwal')}>
             <div className="nav-icon">
@@ -54,7 +80,7 @@ const Dashboard = ({ user }) => {
                 <line x1="3" y1="10" x2="21" y2="10"></line>
               </svg>
             </div>
-            <span className="nav-text">Jadwal</span>
+            <span className="nav-text">{t('nav.schedule')}</span>
           </button>
           <button className={`nav-item ${activeNav === 'riwayat' ? 'active' : ''}`} onClick={() => setActiveNav('riwayat')}>
             <div className="nav-icon">
@@ -62,7 +88,7 @@ const Dashboard = ({ user }) => {
                 <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
-            <span className="nav-text">Riwayat</span>
+            <span className="nav-text">{t('nav.history')}</span>
           </button>
           <button className={`nav-item ${activeNav === 'panduan' ? 'active' : ''}`} onClick={() => setActiveNav('panduan')}>
             <div className="nav-icon">
@@ -71,7 +97,7 @@ const Dashboard = ({ user }) => {
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
               </svg>
             </div>
-            <span className="nav-text">Panduan</span>
+            <span className="nav-text">{t('nav.guide')}</span>
           </button>
           <button className={`nav-item ${activeNav === 'profil' ? 'active' : ''}`} onClick={() => setActiveNav('profil')}>
             <div className="nav-icon">
@@ -80,7 +106,7 @@ const Dashboard = ({ user }) => {
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
-            <span className="nav-text">Profil</span>
+            <span className="nav-text">{t('nav.profile')}</span>
           </button>
         </nav>
       </aside>
@@ -96,7 +122,7 @@ const Dashboard = ({ user }) => {
             <div className="dash-header-top">
               <div className="dash-logo-title">
                 {/* The logo is now in sidebar, but we can keep title here for mobile or just as page title */}
-                <h1 className="dash-title">Monitoring Hardware</h1>
+                <h1 className="dash-title">{t('dashboard.title')}</h1>
               </div>
               <button className="btn-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -109,11 +135,11 @@ const Dashboard = ({ user }) => {
             {/* Welcome Section */}
             <div className="welcome-section">
               <div className="welcome-text">
-                <p>Selamat Datang,</p>
-                <h2>Halo, {user?.name || 'User'}!</h2>
+                <p>{t('dashboard.welcome')}</p>
+                <h2>{t('dashboard.hello', { name: user?.name || 'User' })}</h2>
               </div>
               <div className="active-device">
-                <div className="active-device-label">ACTIVE DEVICE</div>
+                <div className="active-device-label">{t('dashboard.activeDevice')}</div>
                 <div className="active-device-name">{user?.device || 'PC-GAMER-01'}</div>
               </div>
             </div>
@@ -130,7 +156,7 @@ const Dashboard = ({ user }) => {
                     <line x1="6" y1="20" x2="6" y2="14"></line>
                   </svg>
                 </div>
-                <span className="statistik-text">Statistik Hardware</span>
+                <span className="statistik-text">{t('dashboard.statsBtn')}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="statistik-chevron">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
@@ -141,11 +167,11 @@ const Dashboard = ({ user }) => {
                 <div className="status-info">
                   <div className="status-dot"></div>
                   <div className="status-text">
-                    <h3>Perangkat Sehat</h3>
-                    <p>Sistem berjalan secara optimal</p>
+                    <h3>{t('dashboard.healthy')}</h3>
+                    <p>{t('dashboard.healthyDesc')}</p>
                   </div>
                 </div>
-                <div className="badge-active">AKTIF</div>
+                <div className="badge-active">{t('dashboard.activeBadge')}</div>
               </div>
 
               {/* Stats Grid */}
@@ -157,14 +183,14 @@ const Dashboard = ({ user }) => {
                         <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
                       </svg>
                     </div>
-                    <div className="stat-label">SUHU CPU 
+                    <div className="stat-label">{t('dashboard.cpuTemp')}
                       <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="9 18 15 12 9 6"></polyline>
                       </svg>
                     </div>
                   </div>
                   <div className="stat-value">
-                    45<span className="stat-unit">° C</span>
+                    {displayCpuTemp}<span className="stat-unit">° {tempUnit}</span>
                   </div>
                   <div className="stat-bar-bg">
                     <div className="stat-bar-fill" style={{width: '45%'}}></div>
@@ -183,7 +209,7 @@ const Dashboard = ({ user }) => {
                         <line x1="16" y1="15" x2="16" y2="20"></line>
                       </svg>
                     </div>
-                    <div className="stat-label">MEMORI</div>
+                    <div className="stat-label">{t('dashboard.memory')}</div>
                   </div>
                   <div className="stat-value">
                     40<span className="stat-unit">%</span>
@@ -200,8 +226,8 @@ const Dashboard = ({ user }) => {
                   95%
                 </div>
                 <div className="battery-info">
-                  <h3>Kesehatan Baterai</h3>
-                  <p>Terhubung ke sumber daya AC</p>
+                  <h3>{t('dashboard.battery')}</h3>
+                  <p>{t('dashboard.batteryDesc')}</p>
                 </div>
                 <div className="battery-icon flex-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -216,18 +242,18 @@ const Dashboard = ({ user }) => {
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
                   </svg>
-                  PEMELIHARAAN RUTIN
+                  {t('dashboard.maintenance')}
                 </div>
-                <h3>Ganti Thermal Paste: 15 Hari Lagi</h3>
-                <p>Pastikan performa pendinginan tetap maksimal dengan penggantian berkala.</p>
-                <button className="btn-maintenance">Atur Jadwal</button>
+                <h3>{t('dashboard.maintenanceTitle')}</h3>
+                <p>{t('dashboard.maintenanceDesc')}</p>
+                <button className="btn-maintenance">{t('dashboard.maintenanceBtn')}</button>
               </div>
 
               {/* Arsitektur Sistem Card */}
               <div className="card architecture-card">
                 <div className="architecture-header">
-                  <h3>Arsitektur Sistem</h3>
-                  <p>Visualisasi komponen internal secara real-time</p>
+                  <h3>{t('dashboard.architecture')}</h3>
+                  <p>{t('dashboard.architectureDesc')}</p>
                 </div>
                 <div className="architecture-image">
                   <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Motherboard Architecture" />
@@ -252,9 +278,9 @@ const Dashboard = ({ user }) => {
 
         {activeNav === 'profil' && (
           showSettings ? (
-            <Settings onBack={() => setShowSettings(false)} />
+            <Settings user={user} onBack={() => setShowSettings(false)} />
           ) : (
-            <Profile user={user} onSettingsClick={() => setShowSettings(true)} />
+            <Profile user={user} onUpdateProfile={updateUser} onSettingsClick={() => setShowSettings(true)} />
           )
         )}
       </main>

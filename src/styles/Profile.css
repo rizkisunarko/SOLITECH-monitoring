@@ -80,7 +80,7 @@
   height: 96px;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   background-color: #1a2a3a;
 }
 
@@ -104,7 +104,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .profile-name {
@@ -170,7 +170,7 @@
   background-color: var(--white);
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -187,8 +187,13 @@
   border-radius: 0 4px 4px 0;
 }
 
-.green-border::before { background-color: var(--green-success); }
-.orange-border::before { background-color: #f59e0b; }
+.green-border::before {
+  background-color: var(--green-success);
+}
+
+.orange-border::before {
+  background-color: #f59e0b;
+}
 
 .health-label {
   font-size: 10px;
@@ -217,14 +222,20 @@
   font-weight: 800;
   padding: 3px 0;
 }
-.health-badge.optimal { color: var(--green-success); }
-.health-badge.tinggi { color: #f59e0b; }
+
+.health-badge.optimal {
+  color: var(--green-success);
+}
+
+.health-badge.tinggi {
+  color: #f59e0b;
+}
 
 .uptime-card {
   background-color: var(--white);
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -253,7 +264,10 @@
   gap: 4px;
 }
 
-.uptime-text .health-label { padding-left: 0; }
+.uptime-text .health-label {
+  padding-left: 0;
+}
+
 .uptime-text strong {
   font-size: 14px;
   font-weight: 800;
@@ -275,7 +289,9 @@
   gap: 16px;
 }
 
-.device-icon { color: var(--primary-blue); }
+.device-icon {
+  color: var(--primary-blue);
+}
 
 .device-info {
   flex: 1;
@@ -304,8 +320,14 @@
   border-radius: 50%;
   display: inline-block;
 }
-.dot-green { background-color: var(--green-success); }
-.dot-gray { background-color: #94a3b8; }
+
+.dot-green {
+  background-color: var(--green-success);
+}
+
+.dot-gray {
+  background-color: #94a3b8;
+}
 
 .btn-device-settings {
   background: none;
@@ -358,10 +380,13 @@
 }
 
 .action-logout {
-  color: #ef4444; 
+  color: #ef4444;
   margin-top: 8px;
 }
-.action-logout .action-left { color: #ef4444; }
+
+.action-logout .action-left {
+  color: #ef4444;
+}
 
 /* Hide Desktop View by Default */
 .profile-desktop-view {
@@ -377,7 +402,7 @@
   .profile-mobile-view {
     display: none;
   }
-  
+
   .profile-desktop-view {
     display: flex;
     flex-direction: column;
@@ -452,7 +477,7 @@
     display: flex;
     gap: 32px;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   }
 
   .d-info-avatar-col {
@@ -559,7 +584,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     position: relative;
   }
 
@@ -573,8 +598,13 @@
     border-radius: 0 4px 4px 0;
   }
 
-  .d-device-card.border-green::before { background-color: var(--green-success); }
-  .d-device-card.border-gray::before { background-color: #cbd5e1; }
+  .d-device-card.border-green::before {
+    background-color: var(--green-success);
+  }
+
+  .d-device-card.border-gray::before {
+    background-color: #cbd5e1;
+  }
 
   .d-device-card-inner {
     display: flex;
@@ -727,7 +757,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   }
 
   .d-health-icon {
@@ -740,9 +770,17 @@
     background-color: #f8fafc;
   }
 
-  .d-health-icon.green-text { color: var(--green-success); }
-  .d-health-icon.orange-text { color: #f59e0b; }
-  .d-health-icon.blue-text { color: var(--primary-blue); }
+  .d-health-icon.green-text {
+    color: var(--green-success);
+  }
+
+  .d-health-icon.orange-text {
+    color: #f59e0b;
+  }
+
+  .d-health-icon.blue-text {
+    color: var(--primary-blue);
+  }
 
   .d-health-data {
     display: flex;
@@ -774,8 +812,14 @@
     font-size: 9px;
     font-weight: 800;
   }
-  .d-health-badge.optimal { color: var(--green-success); }
-  .d-health-badge.tinggi { color: #f59e0b; }
+
+  .d-health-badge.optimal {
+    color: var(--green-success);
+  }
+
+  .d-health-badge.tinggi {
+    color: #f59e0b;
+  }
 
   /* Add Device */
   .d-add-device-card {
@@ -806,7 +850,7 @@
     align-items: center;
     justify-content: center;
     color: var(--text-dark);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   }
 
   .d-add-device-card p {
@@ -823,7 +867,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   }
 
   .d-settings-label {
@@ -862,4 +906,101 @@
     font-weight: 700;
     color: var(--text-dark);
   }
+}
+
+/* ========================================================== */
+/* EDIT MODAL STYLES */
+/* ========================================================== */
+
+.profile-edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  padding: 16px;
+}
+
+.profile-edit-modal {
+  background-color: var(--white, #ffffff);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.profile-edit-modal h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-dark, #1e293b);
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-light, #64748b);
+}
+
+.form-group input {
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--primary-blue, #3b82f6);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: #f1f5f9;
+  color: var(--text-dark, #1e293b);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-save {
+  padding: 10px 20px;
+  background-color: var(--primary-blue, #3b82f6);
+  color: var(--white, #ffffff);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-save:hover {
+  opacity: 0.9;
 }
