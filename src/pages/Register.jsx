@@ -22,8 +22,13 @@ const Register = () => {
     }
     
     // Simulate successful registration
-    const newUser = { name: name.trim(), email: email.trim(), password };
-    
+    const newUser = { 
+      id: Date.now().toString(),
+      name: name.trim(), 
+      email: email.trim(), 
+      password 
+    };
+
     // Simpan ke daftar user terdaftar di local storage agar bisa login lagi nanti
     const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     existingUsers.push(newUser);
