@@ -6,6 +6,13 @@
       "password": "password123",
       "name": "User",
       "device": "PC-GAMER-01"
+    },
+    {
+      "id": "2",
+      "email": "budi@solitech.com",
+      "password": "password123",
+      "name": "Budi",
+      "device": "Laptop-Budi"
     }
   ]
 }

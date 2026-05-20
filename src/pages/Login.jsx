@@ -15,10 +15,39 @@ const Login = ({ onLogin }) => {
     setError('');
 
     // Check against dummy JSON data OR local storage registered users
-    const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const user = usersData.find(u => u.email.trim().toLowerCase() === email.trim().toLowerCase() && u.password === password) ||
-                 registeredUsers.find(u => u.email.trim().toLowerCase() === email.trim().toLowerCase() && u.password === password);
+    let registeredUsers = [];
+    try {
+      registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      if (!Array.isArray(registeredUsers)) registeredUsers = [];
+    } catch (e) {
+      registeredUsers = [];
+    }
+
+    let userArray = [];
+    if (Array.isArray(usersData)) {
+      userArray = usersData;
+    } else if (usersData && Array.isArray(usersData.users)) {
+      userArray = usersData.users;
+    } else if (usersData && usersData.default && Array.isArray(usersData.default.users)) {
+      userArray = usersData.default.users; // Sometimes default export is nested
+    }
+
+    console.log("Input Email:", email, "Password:", password);
+    console.log("userArray dari JSON:", userArray);
+    console.log("registeredUsers dari LocalStorage:", registeredUsers);
+
+    const checkEmail = email.trim().toLowerCase();
     
+    // Find in JSON
+    let user = userArray.find(u => u.email && u.email.trim().toLowerCase() === checkEmail && u.password === password);
+    
+    // If not found in JSON, find in Local Storage
+    if (!user) {
+      user = registeredUsers.find(u => u.email && u.email.trim().toLowerCase() === checkEmail && u.password === password);
+    }
+    
+    console.log("User ditemukan:", user);
+
     if (user) {
       if (onLogin) onLogin(user);
       localStorage.setItem('currentUser', JSON.stringify(user));
