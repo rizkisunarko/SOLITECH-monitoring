@@ -1,9 +1,95 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import '../styles/Profile.css';
 
-const Profile = ({ user, onSettingsClick }) => {
+const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
+  const { t } = useLanguage();
+  const [profileData, setProfileData] = useState({
+    name: user?.name || 'Budi',
+    email: user?.email || 'budi@solitech.com',
+    avatar: user?.avatar || 'https://i.pinimg.com/736x/85/38/f4/8538f477fbcdd04031bbcdd7f3dba6be.jpg'
+  });
+
+  const [tempUnit, setTempUnit] = useState(localStorage.getItem('tempUnit') || 'C');
+
+  useEffect(() => {
+    const handleTempChange = () => {
+      setTempUnit(localStorage.getItem('tempUnit') || 'C');
+    };
+    window.addEventListener('tempUnitChanged', handleTempChange);
+    return () => window.removeEventListener('tempUnitChanged', handleTempChange);
+  }, []);
+
+  const baseAvgTemp = 42;
+  const displayAvgTemp = tempUnit === 'F' ? Math.round(baseAvgTemp * 9 / 5 + 32) : baseAvgTemp;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState(profileData);
+
+  const handleEditClick = () => {
+    setEditForm(profileData);
+    setIsEditing(true);
+  };
+
+  const handleSaveProfile = (e) => {
+    e.preventDefault();
+    setProfileData(editForm);
+    setIsEditing(false);
+    if (onUpdateProfile) {
+      onUpdateProfile(editForm);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
   return (
     <div className="profile-container fade-in">
+
+      {/* ========================================== */}
+      {/* EDIT PROFILE MODAL */}
+      {/* ========================================== */}
+      {isEditing && (
+        <div className="profile-edit-modal-overlay">
+          <div className="profile-edit-modal fade-in">
+            <h3>{t('profile.modalEditTitle')}</h3>
+            <form onSubmit={handleSaveProfile}>
+              <div className="form-group">
+                <label>{t('profile.modalName')}</label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>{t('profile.modalEmail')}</label>
+                <input
+                  type="email"
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>{t('profile.modalAvatar')}</label>
+                <input
+                  type="url"
+                  value={editForm.avatar}
+                  onChange={(e) => setEditForm({ ...editForm, avatar: e.target.value })}
+                  placeholder="https://contoh.com/foto-anda.jpg"
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={handleCancelEdit}>{t('profile.modalCancel')}</button>
+                <button type="submit" className="btn-save">{t('profile.modalSave')}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ========================================== */}
       {/* MOBILE VIEW (Kept exactly the same as before) */}
@@ -47,22 +133,22 @@ const Profile = ({ user, onSettingsClick }) => {
           <div className="profile-info-section">
             <div className="profile-avatar-wrapper">
               <div className="profile-avatar">
-                <img src="https://i.pinimg.com/736x/85/38/f4/8538f477fbcdd04031bbcdd7f3dba6be.jpg" alt="Profile" className="avatar-img" />
+                <img src={profileData.avatar} alt="Profile" className="avatar-img" />
               </div>
-              <button className="btn-edit-avatar">
+              <button className="btn-edit-avatar" onClick={handleEditClick}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
               </button>
             </div>
-            <h2 className="profile-name">{user?.name || 'Rizki Pratama Sunarko'}</h2>
-            <p className="profile-email">{user?.email || 'rizki@gmail.com'}</p>
-            <button className="btn-edit-profile">Edit Profil</button>
+            <h2 className="profile-name">{profileData.name}</h2>
+            <p className="profile-email">{profileData.email}</p>
+            <button className="btn-edit-profile" onClick={handleEditClick}>{t('profile.editProfile')}</button>
           </div>
 
           {/* Ringkasan Kesehatan */}
           <div className="profile-section">
             <div className="section-header">
-              <span className="section-label">RINGKASAN KESEHATAN</span>
-              <a href="#live-update" className="section-link">Live Update</a>
+              <span className="section-label">{t('profile.healthSummary')}</span>
+              <a href="#live-update" className="section-link">{t('profile.liveUpdate')}</a>
             </div>
 
             <div className="health-cards-row">
@@ -139,7 +225,7 @@ const Profile = ({ user, onSettingsClick }) => {
             <button className="action-row">
               <div className="action-left">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                <span>Keamanan & Privasi</span>
+                <span>{t('profile.security')}</span>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
@@ -147,7 +233,7 @@ const Profile = ({ user, onSettingsClick }) => {
             <button className="action-row action-logout" onClick={() => window.location.href = '/'}>
               <div className="action-left">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                <span>Keluar Sesi</span>
+                <span>{t('profile.logoutSess')}</span>
               </div>
             </button>
           </div>
@@ -159,7 +245,7 @@ const Profile = ({ user, onSettingsClick }) => {
       {/* ========================================== */}
       <div className="profile-desktop-view">
         <div className="d-profile-header">
-          <h2>Profil Pengguna</h2>
+          <h2>{t('profile.title')}</h2>
           <div className="d-header-actions">
             <button className="d-btn-icon" onClick={onSettingsClick}>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -167,7 +253,7 @@ const Profile = ({ user, onSettingsClick }) => {
             <button className="d-btn-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             </button>
-            <img src="https://i.pinimg.com/736x/85/38/f4/8538f477fbcdd04031bbcdd7f3dba6be.jpg" alt="Avatar" className="d-mini-avatar" />
+            <img src={profileData.avatar} alt="Avatar" className="d-mini-avatar" />
           </div>
         </div>
 
@@ -178,26 +264,26 @@ const Profile = ({ user, onSettingsClick }) => {
             {/* Info Card */}
             <div className="d-info-card">
               <div className="d-info-avatar-col">
-                <img src="https://i.pinimg.com/736x/85/38/f4/8538f477fbcdd04031bbcdd7f3dba6be.jpg" alt="Profile" className="d-avatar-large" />
-                <button className="d-btn-edit-profile">
+                <img src={profileData.avatar} alt="Profile" className="d-avatar-large" />
+                <button className="d-btn-edit-profile" onClick={handleEditClick}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                  Edit Profil
+                  {t('profile.editProfile')}
                 </button>
               </div>
               <div className="d-info-details-col">
-                <h1>{user?.name || 'Rizki Pratama Sunarko'}</h1>
-                <p className="d-email">{user?.email || 'rizki@gmail.com'}</p>
+                <h1>{profileData.name}</h1>
+                <p className="d-email">{profileData.email}</p>
                 <div className="d-badges-row">
-                  <span className="d-badge-platinum">PLATINUM USER</span>
-                  <span className="d-badge-verified">AKUN TERVERIFIKASI</span>
+                  <span className="d-badge-platinum">{t('profile.platinum')}</span>
+                  <span className="d-badge-verified">{t('profile.verified')}</span>
                 </div>
               </div>
             </div>
 
             {/* Devices Section */}
             <div className="d-section-header">
-              <h3>Perangkat Terhubung</h3>
-              <a href="#lihat-semua">Lihat Semua</a>
+              <h3>{t('profile.connectedDevices')}</h3>
+              <a href="#lihat-semua">{t('profile.seeAll')}</a>
             </div>
 
             <div className="d-devices-row">

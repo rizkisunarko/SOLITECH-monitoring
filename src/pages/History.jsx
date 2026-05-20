@@ -1,4 +1,6 @@
 import React from 'react';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import '../styles/History.css';
 
 const History = () => {
@@ -65,6 +67,57 @@ const History = () => {
   ];
 
   const filters = ['Semua Bulan', 'Januari', 'Desember', 'November', 'Oktober'];
+  const [activeFilter, setActiveFilter] = React.useState('Semua Bulan');
+
+  const filteredData = historyData.filter(item => {
+    if (activeFilter === 'Semua Bulan') return true;
+    
+    // Ekstrak bulan dari format tanggal "12 JAN 2024"
+    const month = item.date.split(' ')[1].toLowerCase();
+    
+    // Ambil 3 huruf pertama dari nama filter (misal: "Januari" -> "jan")
+    const filterMonth = activeFilter.toLowerCase().substring(0, 3);
+    
+    return month === filterMonth;
+  });
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    
+    // Menambahkan judul
+    doc.setFontSize(18);
+    doc.text('Laporan Riwayat Pemeliharaan', 14, 22);
+    
+    doc.setFontSize(12);
+    doc.text(`Filter: ${activeFilter}`, 14, 30);
+    
+    // Menyiapkan data untuk tabel
+    const tableColumn = ["Tanggal", "Status", "Nama Aktivitas", "Deskripsi"];
+    const tableRows = [];
+    
+    filteredData.forEach(item => {
+      const rowData = [
+        item.date,
+        item.badge,
+        item.title,
+        item.desc
+      ];
+      tableRows.push(rowData);
+    });
+    
+    // Generate tabel
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 36,
+      theme: 'grid',
+      styles: { fontSize: 10, cellPadding: 4 },
+      headStyles: { fillColor: [41, 128, 185], textColor: 255 }
+    });
+    
+    // Download file
+    doc.save(`Laporan_Pemeliharaan_${activeFilter.replace(' ', '_')}.pdf`);
+  };
 
   return (
     <div className="history-container fade-in">
@@ -85,7 +138,8 @@ const History = () => {
         {filters.map((filter, index) => (
           <button 
             key={index} 
-            className={`filter-pill ${index === 0 ? 'active' : 'inactive'}`}
+            className={`filter-pill ${activeFilter === filter ? 'active' : 'inactive'}`}
+            onClick={() => setActiveFilter(filter)}
           >
             {filter}
           </button>
@@ -93,11 +147,16 @@ const History = () => {
       </div>
 
       <div className="timeline-container">
-        {historyData.map((item) => (
-          <div key={item.id} className="timeline-item">
-            <div className="timeline-icon">
-              {item.icon}
-            </div>
+        {filteredData.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+            Tidak ada riwayat untuk bulan ini
+          </div>
+        ) : (
+          filteredData.map((item) => (
+            <div key={item.id} className="timeline-item">
+              <div className="timeline-icon">
+                {item.icon}
+              </div>
             <div className={`timeline-card status-${item.status}`}>
               <div className="timeline-card-header">
                 <span className="timeline-date">{item.date}</span>
@@ -107,11 +166,12 @@ const History = () => {
               <p className="timeline-desc">{item.desc}</p>
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="export-container">
-        <button className="btn-export-pdf">
+        <button className="btn-export-pdf" onClick={exportToPDF}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
