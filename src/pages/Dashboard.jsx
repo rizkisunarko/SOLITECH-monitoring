@@ -9,11 +9,17 @@ import Settings from './Settings';
 import '../styles/Dashboard.css';
 
 const Dashboard = ({ user: propUser }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [activeNav, setActiveNav] = useState('beranda');
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [tempUnit, setTempUnit] = useState(localStorage.getItem('tempUnit') || 'C');
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: 'Suhu CPU Wajar', message: 'Suhu CPU saat ini adalah 45°C (Optimal).', type: 'info', read: false },
+    { id: 2, title: 'Pemeliharaan Rutin', message: '15 hari lagi waktunya mengganti thermal paste.', type: 'warning', read: false },
+    { id: 3, title: 'Baterai Terisi Penuh', message: 'Terhubung ke daya AC (100% Terisi).', type: 'success', read: true }
+  ]);
 
   useEffect(() => {
     const handleTempChange = () => {
@@ -118,18 +124,45 @@ const Dashboard = ({ user: propUser }) => {
             <HardwareStatistik onBack={() => setShowStats(false)} />
           ) : (
           <div className="fade-in">
-            {/* Header Top */}
             <div className="dash-header-top">
               <div className="dash-logo-title">
                 {/* The logo is now in sidebar, but we can keep title here for mobile or just as page title */}
                 <h1 className="dash-title">{t('dashboard.title')}</h1>
               </div>
-              <button className="btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-              </button>
+              <div className="notif-container" style={{ position: 'relative' }}>
+                <button className="btn-icon" onClick={() => setShowNotifications(!showNotifications)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                  {notifications.some(n => !n.read) && <span className="notification-badge" />}
+                </button>
+                {showNotifications && (
+                  <div className="notification-dropdown">
+                    <div className="notif-header">
+                      <h4>{language === 'id' ? 'Notifikasi' : 'Notifications'}</h4>
+                      <button onClick={() => setNotifications(notifications.map(n => ({...n, read: true})))}>
+                        {language === 'id' ? 'Tandai dibaca' : 'Mark all read'}
+                      </button>
+                    </div>
+                    <div className="notif-list">
+                      {notifications.length === 0 ? (
+                        <div className="notif-empty">Tidak ada notifikasi baru</div>
+                      ) : (
+                        notifications.map(n => (
+                          <div key={n.id} className={`notif-item ${n.read ? 'read' : 'unread'}`} onClick={() => setNotifications(notifications.map(item => item.id === n.id ? {...item, read: true} : item))}>
+                            <div className="notif-item-header">
+                              <span className={`notif-dot ${n.type}`} />
+                              <span className="notif-item-title">{n.title}</span>
+                            </div>
+                            <p className="notif-item-desc">{n.message}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Welcome Section */}
@@ -236,7 +269,6 @@ const Dashboard = ({ user: propUser }) => {
                 </div>
               </div>
 
-              {/* Maintenance Card */}
               <div className="maintenance-card style-new">
                 <div className="maintenance-header">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -246,7 +278,7 @@ const Dashboard = ({ user: propUser }) => {
                 </div>
                 <h3>{t('dashboard.maintenanceTitle')}</h3>
                 <p>{t('dashboard.maintenanceDesc')}</p>
-                <button className="btn-maintenance">{t('dashboard.maintenanceBtn')}</button>
+                <button className="btn-maintenance" onClick={() => setActiveNav('jadwal')}>{t('dashboard.maintenanceBtn')}</button>
               </div>
 
               {/* Arsitektur Sistem Card */}
@@ -265,7 +297,7 @@ const Dashboard = ({ user: propUser }) => {
         )}
 
         {activeNav === 'jadwal' && (
-          <Schedule />
+          <Schedule onNavigate={(nav) => setActiveNav(nav)} />
         )}
 
         {activeNav === 'riwayat' && (

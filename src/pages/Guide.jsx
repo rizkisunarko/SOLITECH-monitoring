@@ -4,6 +4,48 @@ import '../styles/Guide.css';
 const Guide = () => {
   const filters = ['Semua', 'Prosesor', 'Baterai', 'Kebersihan', 'Layar'];
   const [selectedGuide, setSelectedGuide] = useState(null);
+  const [scanState, setScanState] = useState('idle'); // 'idle' | 'scanning' | 'completed'
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanMessage, setScanMessage] = useState('');
+
+  const startHardwareScan = () => {
+    setScanState('scanning');
+    setScanProgress(0);
+    setScanMessage('Menghubungkan ke sensor perangkat...');
+
+    const messages = [
+      'Menghubungkan ke sensor perangkat...',
+      'Membaca sensor suhu CPU (Core 0 - Core 7)...',
+      'Memeriksa RPM kipas pendingin heatsink...',
+      'Menganalisis siklus pengisian baterai...',
+      'Memindai fragmentasi alokasi RAM...',
+      'Mengukur efisiensi distribusi daya (VRM)...',
+      'Pengecekan selesai! Mempersiapkan laporan...'
+    ];
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      setScanProgress((prev) => {
+        const nextProgress = prev + 5;
+        
+        // Update message based on progress
+        const messageIndex = Math.min(
+          Math.floor((nextProgress / 100) * messages.length),
+          messages.length - 1
+        );
+        if (messages[messageIndex] && messages[messageIndex] !== scanMessage) {
+          setScanMessage(messages[messageIndex]);
+        }
+
+        if (nextProgress >= 100) {
+          clearInterval(interval);
+          setScanState('completed');
+          return 100;
+        }
+        return nextProgress;
+      });
+    }, 150); // 100% in 3 seconds (20 steps * 150ms)
+  };
 
   const thermalPasteGuideDetail = {
     title: 'Cara Ganti Thermal Paste',
@@ -115,7 +157,7 @@ const Guide = () => {
         <div className="diagnosa-banner">
           <h4>Diagnosa Mandiri</h4>
           <p>Butuh bantuan teknis lebih lanjut? Gunakan alat diagnosa otomatis kami.</p>
-          <button className="btn-diagnosa">Mulai Scan Hardware</button>
+          <button className="btn-diagnosa" onClick={startHardwareScan}>Mulai Scan Hardware</button>
         </div>
 
       </div>
@@ -155,6 +197,63 @@ const Guide = () => {
                 <li style={{ marginBottom: '8px' }}>Pasang kembali pendingin. Jangan menekan terlalu keras tapi pastikan terpasang rata.</li>
               </ol>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Simulation Scan Hardware Overlay */}
+      {scanState !== 'idle' && (
+        <div className="modal-overlay fade-in" style={{ zIndex: 1100 }} onClick={() => scanState === 'completed' && setScanState('idle')}>
+          <div className="modal-content scan-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px', padding: '32px', textAlign: 'center' }}>
+            {scanState === 'scanning' ? (
+              <div className="scan-loading-view">
+                <div className="radar-spinner" style={{ margin: '0 auto 24px' }}>
+                  <div className="radar-ripple"></div>
+                  <div className="radar-core">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="radar-icon-spin">
+                      <line x1="12" y1="2" x2="12" y2="6"></line>
+                      <line x1="12" y1="18" x2="12" y2="22"></line>
+                      <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                      <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                      <line x1="2" y1="12" x2="6" y2="12"></line>
+                      <line x1="18" y1="12" x2="22" y2="12"></line>
+                      <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                      <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="scan-title" style={{ fontSize: '20px', fontWeight: '800', margin: '0 0 12px 0' }}>Memindai Perangkat Keras...</h3>
+                <div className="scan-progress-wrapper" style={{ margin: '24px 0' }}>
+                  <div className="scan-progress-bar" style={{ height: '8px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden', position: 'relative', marginBottom: '8px' }}>
+                    <div className="scan-progress-fill" style={{ width: `${scanProgress}%`, height: '100%', backgroundColor: 'var(--accent-blue)', borderRadius: '4px', transition: 'width 0.15s ease-out' }}></div>
+                  </div>
+                  <span className="scan-progress-text" style={{ fontSize: '14px', fontWeight: '800', color: 'var(--accent-blue)' }}>{scanProgress}%</span>
+                </div>
+                <p className="scan-status-message" style={{ fontSize: '13px', color: 'var(--text-light)', minHeight: '40px', margin: 0 }}>{scanMessage}</p>
+              </div>
+            ) : (
+              <div className="scan-result-view fade-in">
+                <div className="success-icon-wrapper flex-center" style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'var(--green-bg)', color: 'var(--green-success)', margin: '0 auto 20px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+                <h3 className="scan-title" style={{ fontSize: '22px', fontWeight: '800', margin: '0 0 8px 0' }}>Scan Selesai!</h3>
+                <div className="scan-result-badge" style={{ display: 'inline-block', backgroundColor: 'var(--green-bg)', color: 'var(--green-success)', fontSize: '12px', fontWeight: '800', padding: '6px 16px', borderRadius: '20px', margin: '8px 0 20px', letterSpacing: '0.5px' }}>
+                  KESEHATAN SISTEM: 95% (SANGAT BAIK)
+                </div>
+                <div className="scan-result-details" style={{ backgroundColor: 'var(--bg-light)', borderRadius: '12px', padding: '16px', textAlign: 'left', marginBottom: '24px', fontSize: '13px', lineHeight: '1.6' }}>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: 'var(--text-dark)' }}>Ringkasan Hasil Diagnosa:</p>
+                  <ul style={{ paddingLeft: '20px', margin: 0, color: 'var(--text-light)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <li>Suhu CPU stabil di rata-rata 45°C.</li>
+                    <li>Kipas pendingin berputar normal pada 2100 RPM.</li>
+                    <li>Kesehatan Baterai 92% dengan tegangan seimbang.</li>
+                    <li>Saran: Lakukan penggantian thermal paste dalam 15 hari sesuai jadwal pemeliharaan berkala Anda.</li>
+                  </ul>
+                </div>
+                <button className="btn-primary" onClick={() => setScanState('idle')} style={{ width: '100%', padding: '14px', borderRadius: '10px', fontSize: '14px', fontWeight: '800', border: 'none', backgroundColor: 'var(--accent-blue)', color: 'var(--white)', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>Tutup Laporan</button>
+              </div>
+            )}
           </div>
         </div>
       )}
