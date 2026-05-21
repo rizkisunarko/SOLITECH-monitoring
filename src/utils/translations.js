@@ -85,7 +85,12 @@ export const translations = {
       modalEditTitle: "Edit Profil",
       modalName: "Nama Lengkap",
       modalEmail: "Alamat Email",
-      modalAvatar: "URL Avatar / Foto Profil",
+      modalAvatar: "Upload Foto Profil",
+      uploadBtn: "Pilih Foto",
+      devicesModalTitle: "Perangkat Terhubung",
+      devicesModalDesc: "Daftar detail semua perangkat terhubung dalam jaringan pemantauan Anda.",
+      active: "Aktif",
+      syncTime: "Sinkronisasi",
       modalCancel: "Batal",
       modalSave: "Simpan Perubahan"
     }
@@ -176,7 +181,12 @@ export const translations = {
       modalEditTitle: "Edit Profile",
       modalName: "Full Name",
       modalEmail: "Email Address",
-      modalAvatar: "Avatar / Profile Pic URL",
+      modalAvatar: "Upload Profile Picture",
+      uploadBtn: "Choose Photo",
+      devicesModalTitle: "Connected Devices",
+      devicesModalDesc: "Detailed list of all devices connected within your monitoring network.",
+      active: "Active",
+      syncTime: "Synchronized",
       modalCancel: "Cancel",
       modalSave: "Save Changes"
     }

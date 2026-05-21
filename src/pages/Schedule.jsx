@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TaskDetail from './TaskDetail';
 import '../styles/Schedule.css';
 
-const Schedule = () => {
+const Schedule = ({ onNavigate }) => {
   const navigate = useNavigate();
   const [selectedFullDate, setSelectedFullDate] = useState(new Date(2024, 2, 13)); // Maret = Bulan ke-2 di JS (0-indexed)
   const [activeDate, setActiveDate] = useState(13);
@@ -267,7 +267,13 @@ const Schedule = () => {
             TIPS PERAWATAN
           </div>
           <h3>Bersihkan kipas minimal setiap 6 bulan untuk mencegah overheating.</h3>
-          <button className="btn-tips" onClick={() => navigate('/guide')}>Pelajari Selengkapnya</button>
+          <button className="btn-tips" onClick={() => {
+            if (onNavigate) {
+              onNavigate('panduan');
+            } else {
+              navigate('/guide');
+            }
+          }}>Pelajari Selengkapnya</button>
           
           <svg className="tips-bg-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="currentColor" stroke="none">
             <path d="M12 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0 2c-4.42 0-8 3.58-8 8h16c0-4.42-3.58-8-8-8z" opacity="0.1"/>

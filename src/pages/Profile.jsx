@@ -3,12 +3,14 @@ import { useLanguage } from '../context/LanguageContext';
 import '../styles/Profile.css';
 
 const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [profileData, setProfileData] = useState({
     name: user?.name || 'Budi',
     email: user?.email || 'budi@solitech.com',
     avatar: user?.avatar || 'https://i.pinimg.com/736x/85/38/f4/8538f477fbcdd04031bbcdd7f3dba6be.jpg'
   });
+
+  const [showDevicesModal, setShowDevicesModal] = useState(false);
 
   const [tempUnit, setTempUnit] = useState(localStorage.getItem('tempUnit') || 'C');
 
@@ -75,18 +77,114 @@ const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
               </div>
               <div className="form-group">
                 <label>{t('profile.modalAvatar')}</label>
-                <input
-                  type="url"
-                  value={editForm.avatar}
-                  onChange={(e) => setEditForm({ ...editForm, avatar: e.target.value })}
-                  placeholder="https://contoh.com/foto-anda.jpg"
-                />
+                <div className="avatar-upload-container">
+                  <div className="avatar-preview-wrapper">
+                    <img src={editForm.avatar} alt="Avatar Preview" className="avatar-preview-img" />
+                  </div>
+                  <label htmlFor="avatar-file-input" className="avatar-upload-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>{t('profile.uploadBtn')}</span>
+                  </label>
+                  <input
+                    id="avatar-file-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setEditForm({ ...editForm, avatar: reader.result });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                </div>
               </div>
               <div className="modal-actions">
                 <button type="button" className="btn-cancel" onClick={handleCancelEdit}>{t('profile.modalCancel')}</button>
                 <button type="submit" className="btn-save">{t('profile.modalSave')}</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================== */}
+      {/* CONNECTED DEVICES DETAIL MODAL */}
+      {/* ========================================== */}
+      {showDevicesModal && (
+        <div className="profile-edit-modal-overlay" onClick={() => setShowDevicesModal(false)}>
+          <div className="devices-detail-modal fade-in" onClick={(e) => e.stopPropagation()}>
+            <div className="devices-modal-header">
+              <div className="header-text">
+                <h3>{t('profile.devicesModalTitle')}</h3>
+                <p>{t('profile.devicesModalDesc')}</p>
+              </div>
+              <button className="btn-close-devices" onClick={() => setShowDevicesModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="devices-modal-list">
+              {[
+                { id: 1, name: 'Workstation-XP1', type: 'pc', status: 'connected', ip: '192.168.1.10', location: 'Jakarta', time: 'Active' },
+                { id: 2, name: 'MacBook-Pro-Adit', type: 'mac', status: 'offline', ip: '192.168.1.15', location: 'Bandung', time: '2 ' + t('profile.ago') },
+                { id: 3, name: 'iPhone-15-Budi', type: 'mobile', status: 'connected', ip: '192.168.1.12', location: 'Jakarta', time: 'Active' },
+                { id: 4, name: 'iPad-Air-Design', type: 'tablet', status: 'offline', ip: '192.168.1.18', location: 'Singapore', time: '1 ' + (language === 'id' ? 'Hari ' : 'Day ') + t('profile.ago') },
+                { id: 5, name: 'Ubuntu-Server-DB', type: 'server', status: 'connected', ip: '10.0.2.14', location: 'Jakarta Cloud', time: 'Active' }
+              ].map(dev => (
+                <div key={dev.id} className={`device-detail-card border-${dev.status === 'connected' ? 'green' : 'gray'}`}>
+                  <div className="device-detail-main">
+                    <div className="device-detail-icon-wrapper">
+                      {dev.type === 'pc' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                      )}
+                      {dev.type === 'mac' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="12" rx="2" ry="2"></rect><path d="M2 16h20"></path><path d="M6 20h12"></path></svg>
+                      )}
+                      {dev.type === 'mobile' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                      )}
+                      {dev.type === 'tablet' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                      )}
+                      {dev.type === 'server' && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                      )}
+                    </div>
+                    <div className="device-detail-info">
+                      <h4>{dev.name}</h4>
+                      <div className="device-meta-row">
+                        <span className="device-ip">{dev.ip}</span>
+                        <span className="device-divider">•</span>
+                        <span className="device-location">{dev.location}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="device-detail-status">
+                    <span className={`status-pill ${dev.status}`}>
+                      <span className={`status-dot-blink ${dev.status}`}></span>
+                      {dev.status === 'connected' ? t('profile.connected') : t('profile.offline')}
+                    </span>
+                    <span className="sync-time-text">{dev.status === 'connected' ? (language === 'id' ? 'Aktif' : 'Active') : `${t('profile.syncTime')}: ${dev.time}`}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="devices-modal-footer">
+              <button className="btn-primary-devices" onClick={() => setShowDevicesModal(false)}>{language === 'id' ? 'Selesai' : 'Done'}</button>
+            </div>
           </div>
         </div>
       )}
@@ -184,7 +282,10 @@ const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
 
           {/* Perangkat Terhubung */}
           <div className="profile-section">
-            <span className="section-label">PERANGKAT TERHUBUNG</span>
+            <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <span className="section-label" style={{ margin: 0 }}>{t('profile.connectedDevices')}</span>
+              <button onClick={() => setShowDevicesModal(true)} className="section-link-btn">{t('profile.seeAll')}</button>
+            </div>
 
             <div className="device-list">
               <div className="device-card">
@@ -283,7 +384,7 @@ const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
             {/* Devices Section */}
             <div className="d-section-header">
               <h3>{t('profile.connectedDevices')}</h3>
-              <a href="#lihat-semua">{t('profile.seeAll')}</a>
+              <button onClick={() => setShowDevicesModal(true)} className="d-see-all-btn">{t('profile.seeAll')}</button>
             </div>
 
             <div className="d-devices-row">
