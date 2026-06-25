@@ -21,6 +21,8 @@ const Dashboard = ({ user: propUser }) => {
     { id: 3, title: 'Baterai Terisi Penuh', message: 'Terhubung ke daya AC (100% Terisi).', type: 'success', read: true }
   ]);
 
+  const [realData, setRealData] = useState(null);
+
   useEffect(() => {
     const handleTempChange = () => {
       setTempUnit(localStorage.getItem('tempUnit') || 'C');
@@ -29,7 +31,32 @@ const Dashboard = ({ user: propUser }) => {
     return () => window.removeEventListener('tempUnitChanged', handleTempChange);
   }, []);
 
-  const baseCpuTemp = 45;
+  useEffect(() => {
+    const fetchRealData = async () => {
+      console.log("Dashboard: Mengambil data dari agen...");
+      try {
+        const res = await fetch('http://localhost:5000/api/hardware');
+        if (res.ok) {
+          const data = await res.json();
+          console.log("Dashboard: Data berhasil diterima:", data);
+          setRealData(data);
+        } else {
+          console.error("Dashboard: Respon API tidak ok:", res.status);
+          setRealData(null);
+        }
+      } catch (err) {
+        console.error("Dashboard: Gagal fetch data:", err);
+        setRealData(null);
+      }
+    };
+    fetchRealData();
+    const interval = setInterval(fetchRealData, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const baseCpuTemp = realData ? realData.cpu.temp : 45;
+  const memoryPercent = realData ? realData.ram.percent : 40;
+  const batteryPercent = realData ? realData.battery.percent : 95;
   const displayCpuTemp = tempUnit === 'F' ? Math.round(baseCpuTemp * 9/5 + 32) : baseCpuTemp;
 
   // Get user from props or localStorage
@@ -172,8 +199,16 @@ const Dashboard = ({ user: propUser }) => {
                 <h2>{t('dashboard.hello', { name: user?.name || 'User' })}</h2>
               </div>
               <div className="active-device">
-                <div className="active-device-label">{t('dashboard.activeDevice')}</div>
-                <div className="active-device-name">{user?.device || 'PC-GAMER-01'}</div>
+                <div className="active-device-label">
+                  {t('dashboard.activeDevice')}
+                  {realData && (
+                    <span className="realtime-pulse-badge" style={{ display: 'inline-flex', alignItems: 'center', marginLeft: '6px', color: '#10b981', fontSize: '10px', fontWeight: 'bold' }}>
+                      <span className="pulse-dot" style={{ width: '6px', height: '6px', backgroundColor: '#10b981', borderRadius: '50%', marginRight: '4px', display: 'inline-block' }}></span>
+                      REAL-TIME
+                    </span>
+                  )}
+                </div>
+                <div className="active-device-name">{realData ? realData.hostname : (user?.device || 'PC-GAMER-01')}</div>
               </div>
             </div>
 
@@ -226,7 +261,7 @@ const Dashboard = ({ user: propUser }) => {
                     {displayCpuTemp}<span className="stat-unit">° {tempUnit}</span>
                   </div>
                   <div className="stat-bar-bg">
-                    <div className="stat-bar-fill" style={{width: '45%'}}></div>
+                    <div className="stat-bar-fill" style={{width: `${Math.min(100, Math.max(0, baseCpuTemp))}%`}}></div>
                   </div>
                 </div>
 
@@ -245,10 +280,10 @@ const Dashboard = ({ user: propUser }) => {
                     <div className="stat-label">{t('dashboard.memory')}</div>
                   </div>
                   <div className="stat-value">
-                    40<span className="stat-unit">%</span>
+                    {memoryPercent}<span className="stat-unit">%</span>
                   </div>
                   <div className="stat-bar-bg">
-                    <div className="stat-bar-fill" style={{width: '40%'}}></div>
+                    <div className="stat-bar-fill" style={{width: `${memoryPercent}%`}}></div>
                   </div>
                 </div>
               </div>
@@ -256,11 +291,17 @@ const Dashboard = ({ user: propUser }) => {
               {/* Battery Card */}
               <div className="card battery-card">
                 <div className="battery-circle">
-                  95%
+                  {batteryPercent}%
                 </div>
                 <div className="battery-info">
                   <h3>{t('dashboard.battery')}</h3>
-                  <p>{t('dashboard.batteryDesc')}</p>
+                  <p>
+                    {realData 
+                      ? (realData.battery.isCharging 
+                        ? (language === 'id' ? 'Terhubung ke daya AC (Mengisi)' : 'Connected to AC power (Charging)')
+                        : (language === 'id' ? 'Menggunakan daya baterai' : 'On battery power'))
+                      : t('dashboard.batteryDesc')}
+                  </p>
                 </div>
                 <div className="battery-icon flex-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

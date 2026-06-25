@@ -1,7 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/HardwareStatistik.css';
 
 const HardwareStatistik = ({ onBack }) => {
+  const [realData, setRealData] = useState(null);
+  const [ramHistory, setRamHistory] = useState([30, 45, 40, 35, 40]);
+
+  useEffect(() => {
+    const fetchRealData = async () => {
+      console.log("HardwareStatistik: Mengambil data dari agen...");
+      try {
+        const res = await fetch('http://localhost:5000/api/hardware');
+        if (res.ok) {
+          const data = await res.json();
+          console.log("HardwareStatistik: Data berhasil diterima:", data);
+          setRealData(data);
+        } else {
+          console.error("HardwareStatistik: Respon API tidak ok:", res.status);
+          setRealData(null);
+        }
+      } catch (err) {
+        console.error("HardwareStatistik: Gagal fetch data:", err);
+        setRealData(null);
+      }
+    };
+    fetchRealData();
+    const interval = setInterval(fetchRealData, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (realData) {
+      setRamHistory(prev => {
+        const next = [...prev.slice(1), realData.ram.percent];
+        return next;
+      });
+    }
+  }, [realData]);
+
+  // Determine temperature classes based on values
+  const cpuTemp = realData ? realData.cpu.temp : 45;
+  const cpuTempClass = cpuTemp > 75 ? 'temp-red' : (cpuTemp > 55 ? 'temp-orange' : 'temp-green');
+  const cpuTempStatus = cpuTemp > 75 ? 'SUHU TINGGI' : (cpuTemp > 55 ? 'SUHU HANGAT' : 'SUHU STABIL');
+
+  const gpuTemp = realData ? realData.gpu.temp : 60;
+  const gpuTempClass = gpuTemp > 75 ? 'temp-red' : (gpuTemp > 55 ? 'temp-orange' : 'temp-green');
+  const gpuTempStatus = gpuTemp > 75 ? 'SUHU TINGGI' : (gpuTemp > 55 ? 'SUHU HANGAT' : 'SUHU STABIL');
   return (
     <div className="hardware-stats-container fade-in">
       {/* Header section with back button */}
@@ -50,13 +93,19 @@ const HardwareStatistik = ({ onBack }) => {
         <div className="status-sistem-section">
           <span className="section-label">STATUS SISTEM</span>
           <div className="status-sistem-header">
-            <h3>Kesehatan<br/>Perangkat</h3>
-            <div className="badge-optimal">
+            <h3>Kesehatan<br/>Perangkat {realData && <span style={{ fontSize: '10px', color: '#10b981', display: 'block', marginTop: '4px' }}>• REAL-TIME</span>}</h3>
+            <div className={`badge-optimal ${(cpuTemp > 75 || gpuTemp > 75) ? 'temp-red' : ''}`} style={(cpuTemp > 75 || gpuTemp > 75) ? { background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)' } : {}}>
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                {(cpuTemp > 75 || gpuTemp > 75) ? (
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"></path>
+                ) : (
+                  <>
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </>
+                )}
               </svg>
-              OPTIMAL
+              {(cpuTemp > 75 || gpuTemp > 75) ? 'WARNING' : 'OPTIMAL'}
             </div>
           </div>
         </div>
@@ -66,23 +115,23 @@ const HardwareStatistik = ({ onBack }) => {
           <div className="hw-card-top">
             <div className="hw-info">
               <span className="hw-label">CENTRAL PROCESSING UNIT</span>
-              <h4 className="hw-name">AMD Ryzen 9 5950X</h4>
+              <h4 className="hw-name">{realData ? realData.cpu.name : 'AMD Ryzen 9 5950X'}</h4>
             </div>
             <div className="hw-status">
-              <div className="hw-temp temp-green">
+              <div className={`hw-temp ${cpuTempClass}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
-                45°C
+                {cpuTemp}°C
               </div>
-              <span className="hw-temp-status">SUHU STABIL</span>
+              <span className="hw-temp-status">{cpuTempStatus}</span>
             </div>
           </div>
           <div className="hw-progress-box">
             <div className="hw-progress-header">
               <span>Beban Kerja</span>
-              <span>15%</span>
+              <span>{realData ? realData.cpu.load : 15}%</span>
             </div>
             <div className="hw-progress-bar">
-              <div className="hw-progress-fill fill-blue" style={{ width: '15%' }}></div>
+              <div className="hw-progress-fill fill-blue" style={{ width: `${realData ? realData.cpu.load : 15}%` }}></div>
             </div>
           </div>
         </div>
@@ -92,23 +141,23 @@ const HardwareStatistik = ({ onBack }) => {
           <div className="hw-card-top">
             <div className="hw-info">
               <span className="hw-label">GRAPHICS UNIT</span>
-              <h4 className="hw-name">RTX 3080 Ti</h4>
+              <h4 className="hw-name">{realData ? realData.gpu.name : 'RTX 3080 Ti'}</h4>
             </div>
             <div className="hw-status">
-              <div className="hw-temp temp-orange">
+              <div className={`hw-temp ${gpuTempClass}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
-                60°C
+                {gpuTemp}°C
               </div>
-              <span className="hw-temp-status">RENDERING AKTIF</span>
+              <span className="hw-temp-status">{gpuTempStatus}</span>
             </div>
           </div>
           <div className="hw-progress-box">
             <div className="hw-progress-header">
               <span>Pemanfaatan</span>
-              <span>80%</span>
+              <span>{realData ? realData.gpu.load : 80}%</span>
             </div>
             <div className="hw-progress-bar">
-              <div className="hw-progress-fill fill-orange" style={{ width: '80%' }}></div>
+              <div className="hw-progress-fill fill-orange" style={{ width: `${realData ? realData.gpu.load : 80}%` }}></div>
             </div>
           </div>
         </div>
@@ -120,16 +169,15 @@ const HardwareStatistik = ({ onBack }) => {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hw-small-icon"><rect x="4" y="4" width="16" height="5" rx="2" ry="2"></rect><rect x="4" y="15" width="16" height="5" rx="2" ry="2"></rect><line x1="8" y1="4" x2="8" y2="9"></line><line x1="16" y1="4" x2="16" y2="9"></line><line x1="8" y1="15" x2="8" y2="20"></line><line x1="16" y1="15" x2="16" y2="20"></line></svg>
               <div className="hw-small-text">
                 <span className="hw-label">Penyimpanan RAM</span>
-                <div className="hw-value"><b>8GB</b>/16GB</div>
+                <div className="hw-value"><b>{realData ? realData.ram.used : 8}GB</b>/{realData ? realData.ram.total : 16}GB</div>
               </div>
             </div>
             <div className="hw-small-chart">
-              {/* Dummy bar chart */}
-              <div className="bar b1"></div>
-              <div className="bar b2"></div>
-              <div className="bar b3"></div>
-              <div className="bar b4"></div>
-              <div className="bar b5"></div>
+              <div className="bar b1" style={{ height: `${ramHistory[0]}%` }}></div>
+              <div className="bar b2" style={{ height: `${ramHistory[1]}%` }}></div>
+              <div className="bar b3" style={{ height: `${ramHistory[2]}%` }}></div>
+              <div className="bar b4" style={{ height: `${ramHistory[3]}%` }}></div>
+              <div className="bar b5" style={{ height: `${ramHistory[4]}%` }}></div>
             </div>
           </div>
 
@@ -138,12 +186,12 @@ const HardwareStatistik = ({ onBack }) => {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hw-small-icon"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>
               <div className="hw-small-text">
                 <span className="hw-label">Kapasitas SSD</span>
-                <div className="hw-value"><b>256GB</b>/512GB</div>
+                <div className="hw-value"><b>{realData ? realData.ssd.used : 256}GB</b>/{realData ? realData.ssd.total : 512}GB</div>
               </div>
             </div>
             <div className="hw-small-progress">
               <div className="hw-progress-bar">
-                <div className="hw-progress-fill fill-blue" style={{ width: '50%' }}></div>
+                <div className="hw-progress-fill fill-blue" style={{ width: `${realData ? realData.ssd.percent : 50}%` }}></div>
               </div>
             </div>
           </div>
@@ -156,7 +204,11 @@ const HardwareStatistik = ({ onBack }) => {
           </div>
           <div className="analytics-text">
             <h4>Real-time Analytics</h4>
-            <p>"Pulse icon signifies real-time data and hardware vitality."</p>
+            <p>
+              {realData 
+                ? "Terhubung ke Agen Lokal. Memantau hardware komputer Anda secara real-time."
+                : "Menggunakan data simulasi. Jalankan agen lokal di komputer Anda untuk melihat metrik asli."}
+            </p>
           </div>
         </div>
 
