@@ -13,6 +13,13 @@
       "password": "password123",
       "name": "Budi",
       "device": "Laptop-Budi"
+    },
+    {
+      "id": "3",
+      "email": "rizki@solitech.com",
+      "password": "[PASSWORD]",
+      "name": "Rizki",
+      "device": "Laptop-Rizki"
     }
   ]
 }
