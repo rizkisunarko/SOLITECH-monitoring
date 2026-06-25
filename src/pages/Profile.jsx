@@ -5,8 +5,8 @@ import '../styles/Profile.css';
 const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
   const { t, language } = useLanguage();
   const [profileData, setProfileData] = useState({
-    name: user?.name || 'Budi',
-    email: user?.email || 'budi@solitech.com',
+    name: user?.name || 'Rizki',
+    email: user?.email || 'rizki@solitech.com',
     avatar: user?.avatar || 'https://i.pinimg.com/736x/85/38/f4/8538f477fbcdd04031bbcdd7f3dba6be.jpg'
   });
 
@@ -17,7 +17,7 @@ const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
   const [devices, setDevices] = useState([
     { id: 1, name: 'Workstation-XP1', type: 'pc', status: 'connected', ip: '192.168.1.10', location: 'Jakarta', time: 'Active' },
     { id: 2, name: 'MacBook-Pro-Adit', type: 'mac', status: 'offline', ip: '192.168.1.15', location: 'Bandung', time: '2 ' + t('profile.ago') },
-    { id: 3, name: 'iPhone-15-Budi', type: 'mobile', status: 'connected', ip: '192.168.1.12', location: 'Jakarta', time: 'Active' },
+    { id: 3, name: 'iPhone-15-Rizki', type: 'mobile', status: 'connected', ip: '192.168.1.12', location: 'Jakarta', time: 'Active' },
     { id: 4, name: 'iPad-Air-Design', type: 'tablet', status: 'offline', ip: '192.168.1.18', location: 'Singapore', time: '1 ' + (language === 'id' ? 'Hari ' : 'Day ') + t('profile.ago') },
     { id: 5, name: 'Ubuntu-Server-DB', type: 'server', status: 'connected', ip: '10.0.2.14', location: 'Jakarta Cloud', time: 'Active' }
   ]);
@@ -46,7 +46,7 @@ const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([
     { id: 1, title: 'Profil Diperbarui', message: 'Informasi profil Anda berhasil diperbarui.', type: 'success', read: false },
-    { id: 2, title: 'Perangkat Baru', message: 'iPhone-15-Budi telah terhubung ke jaringan.', type: 'info', read: false },
+    { id: 2, title: 'Perangkat Baru', message: 'iPhone-15-Rizki telah terhubung ke jaringan.', type: 'info', read: false },
     { id: 3, title: 'Keamanan Akun', message: 'Otentikasi dua faktor (2FA) aktif.', type: 'success', read: true }
   ]);
 
@@ -133,7 +133,7 @@ const Profile = ({ user, onUpdateProfile, onSettingsClick }) => {
       + "Tanggal,Aktivitas,Perangkat,Status\n"
       + "2026-06-25 10:45,Pembaruan Firmware Berhasil,Workstation-XP1,Sukses\n"
       + "2026-06-24 16:30,Peringatan Suhu Tinggi (82°C),Workstation-XP1,Peringatan\n"
-      + "2026-06-23 09:15,Koneksi Perangkat Baru,iPhone-15-Budi,Sukses\n"
+      + "2026-06-23 09:15,Koneksi Perangkat Baru,iPhone-15-Rizki,Sukses\n"
       + "2026-06-22 14:00,Kalibrasi Baterai Selesai,MacBook-Pro-Adit,Sukses\n";
       
     const encodedUri = encodeURI(csvContent);
