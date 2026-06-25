@@ -423,7 +423,45 @@ const Schedule = ({ onNavigate }) => {
 
       {/* Detail Tugas Overlay */}
       {selectedTask && (
-        <TaskDetail task={selectedTask} onBack={() => setSelectedTask(null)} />
+        <TaskDetail 
+          task={selectedTask} 
+          onBack={() => setSelectedTask(null)} 
+          onComplete={(taskId) => {
+            setTasks(prevTasks => prevTasks.map(t => {
+              if (t.id === taskId) {
+                return {
+                  ...t,
+                  badgeText: 'SELESAI',
+                  type: 'success',
+                  icon: (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                  )
+                };
+              }
+              return t;
+            }));
+
+            // Add notification
+            const taskObj = tasks.find(t => t.id === taskId);
+            if (taskObj) {
+              setNotifications(prevNotifs => [
+                {
+                  id: Date.now(),
+                  title: 'Tugas Berhasil Diselesaikan',
+                  message: `${taskObj.title} telah diselesaikan.`,
+                  type: 'success',
+                  read: false
+                },
+                ...prevNotifs
+              ]);
+            }
+
+            setSelectedTask(null);
+          }}
+        />
       )}
     </div>
   );

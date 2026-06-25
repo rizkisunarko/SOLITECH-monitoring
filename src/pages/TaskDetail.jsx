@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/TaskDetail.css';
 
-const TaskDetail = ({ task, onBack }) => {
+const TaskDetail = ({ task, onBack, onComplete }) => {
   // Fallback for missing task prop
   if (!task) return null;
 
@@ -221,12 +221,24 @@ const TaskDetail = ({ task, onBack }) => {
 
       {/* Bottom Sticky Action */}
       <div className="task-detail-bottom">
-        <button className="btn-complete-task">
+        <button 
+          className="btn-complete-task"
+          onClick={() => {
+            if (task.type !== 'success' && onComplete) {
+              onComplete(task.id);
+            }
+          }}
+          disabled={task.type === 'success'}
+          style={{
+            opacity: task.type === 'success' ? 0.6 : 1,
+            cursor: task.type === 'success' ? 'not-allowed' : 'pointer'
+          }}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          Selesaikan Tugas
+          {task.type === 'success' ? 'Tugas Telah Selesai' : 'Selesaikan Tugas'}
         </button>
       </div>
     </div>

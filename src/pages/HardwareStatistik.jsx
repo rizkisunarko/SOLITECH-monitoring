@@ -4,6 +4,7 @@ import '../styles/HardwareStatistik.css';
 const HardwareStatistik = ({ onBack }) => {
   const [realData, setRealData] = useState(null);
   const [ramHistory, setRamHistory] = useState([30, 45, 40, 35, 40]);
+  const [selectedDetail, setSelectedDetail] = useState(null); // 'ethernet' | 'displayport' | null
 
   useEffect(() => {
     const fetchRealData = async () => {
@@ -217,7 +218,7 @@ const HardwareStatistik = ({ onBack }) => {
           <span className="section-label">NETWORK & EXTERNAL</span>
           
           <div className="network-list">
-            <div className="network-item">
+            <div className="network-item" onClick={() => setSelectedDetail('ethernet')} style={{ cursor: 'pointer' }}>
               <div className="network-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
               </div>
@@ -228,7 +229,7 @@ const HardwareStatistik = ({ onBack }) => {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </div>
 
-            <div className="network-item">
+            <div className="network-item" onClick={() => setSelectedDetail('displayport')} style={{ cursor: 'pointer' }}>
               <div className="network-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
               </div>
@@ -242,6 +243,95 @@ const HardwareStatistik = ({ onBack }) => {
         </div>
 
       </div>
+
+      {/* Detail Modal */}
+      {selectedDetail && (
+        <div className="modal-overlay fade-in" onClick={() => setSelectedDetail(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '450px', padding: '24px' }}>
+            <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)', paddingBottom: '12px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--bg-light)', color: 'var(--accent-blue)' }}>
+                  {selectedDetail === 'ethernet' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                  )}
+                </div>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '800', color: 'var(--text-dark)' }}>
+                  {selectedDetail === 'ethernet' ? 'Detail Ethernet (LAN)' : 'Detail Display Port'}
+                </h3>
+              </div>
+              <button className="btn-close" onClick={() => setSelectedDetail(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-light)', display: 'flex', alignItems: 'center' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className="modal-body" style={{ fontSize: '13px', color: 'var(--text-dark)', padding: 0 }}>
+              {selectedDetail === 'ethernet' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Status</span>
+                    <span style={{ fontWeight: '700', color: 'var(--green-success)' }}>Terhubung (Connected)</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Kecepatan Tautan</span>
+                    <span style={{ fontWeight: '700' }}>1.0 Gbps (Full Duplex)</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Alamat IPv4</span>
+                    <span style={{ fontWeight: '700' }}>192.168.1.10</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Alamat MAC</span>
+                    <span style={{ fontWeight: '700', fontFamily: 'monospace' }}>E4:D5:3G:6F:8A:12</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Total Terkirim (Tx)</span>
+                    <span style={{ fontWeight: '700' }}>14.2 GB</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Total Diterima (Rx)</span>
+                    <span style={{ fontWeight: '700' }}>85.7 GB</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Pengontrol Network</span>
+                    <span style={{ fontWeight: '700', fontSize: '12px', textAlign: 'right' }}>Intel(R) Ethernet Connection I219-V</span>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Status Display</span>
+                    <span style={{ fontWeight: '700', color: 'var(--green-success)' }}>Aktif (Active)</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Monitor Terhubung</span>
+                    <span style={{ fontWeight: '700' }}>ASUS ROG Swift PG279Q</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Resolusi Maksimal</span>
+                    <span style={{ fontWeight: '700' }}>3840 x 2160 (4K UHD)</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Refresh Rate</span>
+                    <span style={{ fontWeight: '700' }}>144 Hz (G-Sync Enabled)</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Kedalaman Warna</span>
+                    <span style={{ fontWeight: '700' }}>10-bit Color (HDR Aktif)</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--text-light)' }}>Pengontrol Grafis</span>
+                    <span style={{ fontWeight: '700' }}>NVIDIA GeForce RTX 4070</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
