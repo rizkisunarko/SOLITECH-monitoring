@@ -7,15 +7,19 @@ const HardwareStatistik = ({ onBack }) => {
 
   useEffect(() => {
     const fetchRealData = async () => {
+      console.log("HardwareStatistik: Mengambil data dari agen...");
       try {
         const res = await fetch('http://localhost:5000/api/hardware');
         if (res.ok) {
           const data = await res.json();
+          console.log("HardwareStatistik: Data berhasil diterima:", data);
           setRealData(data);
         } else {
+          console.error("HardwareStatistik: Respon API tidak ok:", res.status);
           setRealData(null);
         }
       } catch (err) {
+        console.error("HardwareStatistik: Gagal fetch data:", err);
         setRealData(null);
       }
     };

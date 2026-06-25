@@ -33,15 +33,19 @@ const Dashboard = ({ user: propUser }) => {
 
   useEffect(() => {
     const fetchRealData = async () => {
+      console.log("Dashboard: Mengambil data dari agen...");
       try {
         const res = await fetch('http://localhost:5000/api/hardware');
         if (res.ok) {
           const data = await res.json();
+          console.log("Dashboard: Data berhasil diterima:", data);
           setRealData(data);
         } else {
+          console.error("Dashboard: Respon API tidak ok:", res.status);
           setRealData(null);
         }
       } catch (err) {
+        console.error("Dashboard: Gagal fetch data:", err);
         setRealData(null);
       }
     };

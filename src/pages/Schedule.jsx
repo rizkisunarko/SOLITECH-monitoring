@@ -99,6 +99,13 @@ const Schedule = ({ onNavigate }) => {
   const [newTaskInput, setNewTaskInput] = useState({ title: '', desc: '' });
   const [selectedTask, setSelectedTask] = useState(null);
 
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: 'Tugas Mendekati Deadline', message: 'Ganti Thermal Paste dijadwalkan 15 Mar.', type: 'warning', read: false },
+    { id: 2, title: 'Tugas Berhasil Diselesaikan', message: 'Pembersihan Debu Fan telah diselesaikan.', type: 'success', read: false },
+    { id: 3, title: 'Kalibrasi Baterai Rutin', message: 'Cek Kesehatan Baterai dijadwalkan berikutnya.', type: 'info', read: true }
+  ]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -152,12 +159,103 @@ const Schedule = ({ onNavigate }) => {
           </svg>
           <h2>Jadwal Perawatan</h2>
         </div>
-        <button className="btn-icon-transparent">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-        </button>
+        <div className="schedule-notif-container" style={{ position: 'relative' }}>
+          <button className="btn-icon-transparent" onClick={() => setShowNotifications(!showNotifications)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            {notifications.some(n => !n.read) && <span className="notification-badge" style={{
+              position: 'absolute',
+              top: '4px',
+              right: '4px',
+              width: '8px',
+              height: '8px',
+              backgroundColor: '#ef4444',
+              borderRadius: '50%',
+              border: '2px solid var(--white)'
+            }} />}
+          </button>
+          
+          {showNotifications && (
+            <div className="notification-dropdown" style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              width: '280px',
+              backgroundColor: 'var(--white)',
+              borderRadius: '12px',
+              boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+              border: '1px solid var(--border-light)',
+              zIndex: 100,
+              marginTop: '8px',
+              padding: '12px',
+              animation: 'slideUp 0.2s ease-out'
+            }}>
+              <div className="notif-header" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderBottom: '1px solid var(--border-light)',
+                paddingBottom: '8px',
+                marginBottom: '8px'
+              }}>
+                <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--text-dark)' }}>Notifikasi Perawatan</h4>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setNotifications(notifications.map(n => ({...n, read: true})));
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--accent-blue)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Tandai dibaca
+                </button>
+              </div>
+              <div className="notif-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '200px', overflowY: 'auto' }}>
+                {notifications.length === 0 ? (
+                  <div className="notif-empty" style={{ fontSize: '12px', color: 'var(--text-lighter)', textAlign: 'center', padding: '12px 0' }}>Tidak ada notifikasi baru</div>
+                ) : (
+                  notifications.map(n => (
+                    <div 
+                      key={n.id} 
+                      className={`notif-item ${n.read ? 'read' : 'unread'}`} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setNotifications(notifications.map(item => item.id === n.id ? {...item, read: true} : item));
+                      }}
+                      style={{
+                        padding: '8px',
+                        borderRadius: '8px',
+                        backgroundColor: n.read ? 'transparent' : 'var(--bg-light)',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.2s'
+                      }}
+                    >
+                      <div className="notif-item-header" style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                        <span className={`notif-dot ${n.type}`} style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          backgroundColor: n.type === 'warning' ? '#f59e0b' : n.type === 'success' ? '#22c55e' : '#3b82f6',
+                          display: 'inline-block'
+                        }} />
+                        <span className="notif-item-title" style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-dark)' }}>{n.title}</span>
+                      </div>
+                      <p className="notif-item-desc" style={{ margin: 0, fontSize: '11px', color: 'var(--text-light)', lineHeight: 1.4 }}>{n.message}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Calendar Section */}
